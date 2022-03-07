@@ -28,7 +28,7 @@ public class Loan {
 	private Date loanDate;
 	
 	@ManyToOne @JoinColumn(name="idUser", nullable = false)
-	private User user;
+	private UserEntity user;
 
 	
 	

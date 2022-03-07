@@ -1,5 +1,10 @@
 spring:
   jpa:
-    show-sql: true
-    open-in-view: false
+    hibernate:
+      ddl-auto: update
 
+  datasource:
+    url: jdbc:postgresql:Mediatheque
+    username: postgres
+    password: postgres
+    

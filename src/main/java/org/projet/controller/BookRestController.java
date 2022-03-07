@@ -25,7 +25,7 @@ public class BookRestController {
 	
 	@GetMapping("/{author}")
 	public List <Book> findByAuthor(@PathVariable String author ){
-		return bookRepository.findByAuthorContainingIgnorCase(author);
+		return bookRepository.findByAuthorIgnoreCase(author);
 	}
 	
 	
