@@ -14,7 +14,7 @@ public class UserRequest implements Serializable {
 
 	//Les champs firstname et lastname seront rendus obligatoires en Front
 	private String firstname;
-	private String Lastname;
+	private String lastname;
 	
 	@NotEmpty(message="Champs obligatoire")
 	@Pattern(regexp="/^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$/g")

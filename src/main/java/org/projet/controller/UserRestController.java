@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -82,12 +83,12 @@ public class UserRestController {
 			String hashedPsw = userInBase.getPassword();
 			System.out.println("hashed " + hashedPsw);
 			System.out.println("not hash " + userRequest.getPassword());
-			
+
 			if((BCrypt.checkpw(userRequest.getPassword(), hashedPsw)) == false) {
-				System.out.println("LES MOTS DE PAsSES NE MATCHENt PAS ");
+				System.out.println("LES MOTS DE PASSE NE MATCHENt PAS ");
 				throw new UserNotFoundException("mot de passe invalide");
 			} else {
-				System.out.println("LES MOTS DE PASSES  MATCHENT ");
+				System.out.println("LES MOTS DE PASSE  MATCHENT ");
 
 				userInBase.setUserStatus(UserStatus.CONNECTED);
 				return new ResponseEntity<UserEntity>(userInBase, HttpStatus.ACCEPTED);			
@@ -95,6 +96,15 @@ public class UserRestController {
 		}
 
 	}
+
+	@DeleteMapping("/auth/{idUser}/delete")
+	public ResponseEntity <Void> deleteAccount(@PathVariable long idUser) throws UserNotFoundException{
+		userRepository.findById(idUser).orElseThrow(()-> new UserNotFoundException("Utilisateur non reconnu via son id :" + idUser ));
+		userRepository.deleteById(idUser);
+		
+		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+	}
+
 
 }
 
