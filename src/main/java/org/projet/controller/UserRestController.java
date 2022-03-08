@@ -78,13 +78,20 @@ public class UserRestController {
 		if(!checkIfUserExists(userRequest.getEmail())){
 			throw new UserNotFoundException("Email non reconnu");
 		} else {
-			
 			UserEntity userInBase = userRepository.findByEmail(userRequest.getEmail());
 			String hashedPsw = userInBase.getPassword();
-			if(BCrypt.checkpw(userRequest.getEmail(), hashedPsw)) {
+			System.out.println("hashed " + hashedPsw);
+			System.out.println("not hash " + userRequest.getPassword());
+			
+			if((BCrypt.checkpw(userRequest.getEmail(), hashedPsw)) == true) {
+				System.out.println("LES MOTS DE PAsSES NE MATCHENt PAS ");
+				throw new UserNotFoundException("mot de passe invalide");
+			} else {
+				System.out.println("LES MOTS DE PASSES  MATCHENT ");
+
 				userInBase.setUserStatus(UserStatus.CONNECTED);
-				return new ResponseEntity<UserEntity>(userInBase, HttpStatus.ACCEPTED);
-			} else throw new UserNotFoundException("Mot de passe invalide");
+				return new ResponseEntity<UserEntity>(userInBase, HttpStatus.ACCEPTED);			
+			}
 		}
 
 	}
