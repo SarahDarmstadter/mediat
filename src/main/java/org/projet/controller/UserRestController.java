@@ -58,7 +58,7 @@ public class UserRestController {
 		} else {
 
 			UserEntity userEntity = new UserEntity();
-			userEntity.setPassword(BCrypt.hashpw(userRequest.getEmail(), BCrypt.gensalt(salt)));
+			userEntity.setPassword(BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt(salt)));
 			userEntity.setFirstName(userRequest.getFirstname());
 			userEntity.setLastName(userRequest.getLastname());
 			userEntity.setEmail(userRequest.getEmail());
@@ -83,7 +83,7 @@ public class UserRestController {
 			System.out.println("hashed " + hashedPsw);
 			System.out.println("not hash " + userRequest.getPassword());
 			
-			if((BCrypt.checkpw(userRequest.getEmail(), hashedPsw)) == true) {
+			if((BCrypt.checkpw(userRequest.getPassword(), hashedPsw)) == false) {
 				System.out.println("LES MOTS DE PAsSES NE MATCHENt PAS ");
 				throw new UserNotFoundException("mot de passe invalide");
 			} else {
