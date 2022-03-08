@@ -38,7 +38,7 @@ public class UserEntity {
 	
 	@Column(name="PASSWORD")
 	@NotNull
-	@Pattern(regexp ="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[-+!*$@%_])([-+!*$@%_\\w]{8,15})$/gm;\r\n" + "")
+	//@Pattern(regexp ="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[-+!*$@%_])([-+!*$@%_\\w]{8,15})$/gm;\r\n" + "")
 	private String password;
 	
 	@Column(name="LASTNAME")
@@ -57,7 +57,72 @@ public class UserEntity {
 	@Column(name="USER_ROLE")
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
+
+	public Long getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(Long idUser) {
+		this.idUser = idUser;
+	}
+
+	public List<Loan> getUserLoans() {
+		return userLoans;
+	}
+
+	public void setUserLoans(List<Loan> userLoans) {
+		this.userLoans = userLoans;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public int getPendingLoan() {
+		return pendingLoan;
+	}
+
+	public void setPendingLoan(int pendingLoan) {
+		this.pendingLoan = pendingLoan;
+	}
+
+	public UserRole getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(UserRole userRole) {
+		this.userRole = userRole;
+	}
 	
 	
 
+	
 }

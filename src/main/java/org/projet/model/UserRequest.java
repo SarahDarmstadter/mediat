@@ -5,9 +5,9 @@ import java.io.Serializable;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.Getter;
 
 @Data
-
 public class UserRequest implements Serializable {
 
 	// Cette classe représente les données de l'utilisateur lorsqu'il rempli le formulaire de creation de compte. 
@@ -25,8 +25,5 @@ public class UserRequest implements Serializable {
 	@NotEmpty(message="Champs obligatoire")
 	@Pattern(regexp ="/^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[-+!*$@%_])([-+!*$@%_\\w]{8,15})$/gm;\r\n" + "")
 	private String password;
-	
-	
-	
-	
+
 }

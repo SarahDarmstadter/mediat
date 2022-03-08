@@ -1,0 +1,32 @@
+version: '3'
+services:
+  mediatheque-postgresql:
+    image: postgres:9.6.5
+    volumes:
+      - mediatheque_db:/var/lib/postgresql
+      - mediatheque_data:/var/lib/postgresql/data
+    networks:
+      - back
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+
+  pgadmin4:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "81:80"
+    depends_on:
+      - mediatheque-postgresql
+    networks:
+      - back
+volumes:
+  mediatheque_data:
+  mediatheque_db:
+
+networks:
+  back:

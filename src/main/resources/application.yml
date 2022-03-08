@@ -4,7 +4,7 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:postgresql:Mediatheque
+    url: jdbc:postgresql:mediatheque-postgresql
     username: postgres
     password: postgres
     

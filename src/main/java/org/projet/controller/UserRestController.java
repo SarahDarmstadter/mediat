@@ -3,7 +3,6 @@ package org.projet.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.projet.config.BcryptEncoder;
 import org.projet.exceptions.UserAlreadyExistsException;
 import org.projet.model.UserEntity;
 import org.projet.model.UserRepository;
@@ -24,13 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users")
 public class UserRestController {
 
-	private String salt = "DOBBY2022";
+	private String salt = "$2b$10$//DXiVVE59p7G5k/4Klx/e";
 	
 	@Autowired
 	UserRepository userRepository;
 
-	@Autowired
-	BcryptEncoder bcryptEncorder;
+//	@Autowired
+//	BcryptEncoder bcryptEncorder;
 
 
 	@GetMapping
@@ -56,7 +55,10 @@ public class UserRestController {
 		} else {
 
 			UserEntity userEntity = new UserEntity();
-			userEntity.setPassword(BCrypt.hashpw(userRequest.getEmail(), BCrypt.gensalt(salt, 10)));
+			userEntity.setPassword(BCrypt.hashpw(userRequest.getEmail(), BCrypt.gensalt(salt)));
+			userEntity.setFirstName(userRequest.getFirstname());
+			userEntity.setLastName(userRequest.getLastname());
+			userEntity.setEmail(userRequest.getEmail());
 			userEntity = userRepository.save(userEntity);
 			return new ResponseEntity<UserEntity>(userEntity, HttpStatus.NO_CONTENT);
 		}
