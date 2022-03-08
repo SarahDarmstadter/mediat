@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.projet.exceptions.UserAlreadyExistsException;
+import org.projet.exceptions.UserNotFoundException;
 import org.projet.model.UserEntity;
 import org.projet.model.UserRepository;
 import org.projet.model.UserRequest;
+import org.projet.model.UserRole;
+import org.projet.model.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserRestController {
 
 	private String salt = "$2b$10$//DXiVVE59p7G5k/4Klx/e";
-	
+
 	@Autowired
 	UserRepository userRepository;
 
-//	@Autowired
-//	BcryptEncoder bcryptEncorder;
+	//	@Autowired
+	//	BcryptEncoder bcryptEncorder;
 
 
 	@GetMapping
@@ -43,11 +46,11 @@ public class UserRestController {
 	}
 
 	@GetMapping("/search")
-	public Optional<UserEntity> findUserByEmail(@RequestParam String email){
+	public UserEntity findUserByEmail(@RequestParam String email) throws UserNotFoundException {
 		return userRepository.findByEmail(email);
 	}
 
-	@PostMapping("/create-account")
+	@PostMapping("/auth/signup")
 	public ResponseEntity <UserEntity> createUser(@RequestBody UserRequest userRequest) throws UserAlreadyExistsException {
 		//Check if user exists already
 		if(checkIfUserExists(userRequest.getEmail())) {
@@ -59,8 +62,10 @@ public class UserRestController {
 			userEntity.setFirstName(userRequest.getFirstname());
 			userEntity.setLastName(userRequest.getLastname());
 			userEntity.setEmail(userRequest.getEmail());
+			userEntity.setUserRole(UserRole.USER);
+			userEntity.setUserStatus(UserStatus.CONNECTED);
 			userEntity = userRepository.save(userEntity);
-			return new ResponseEntity<UserEntity>(userEntity, HttpStatus.NO_CONTENT);
+			return new ResponseEntity<UserEntity>(userEntity, HttpStatus.CREATED);
 		}
 	}
 
@@ -68,6 +73,21 @@ public class UserRestController {
 		return userRepository.findByEmail(email) != null ? true : false;
 	}
 
+	@PostMapping("/auth/login")
+	public ResponseEntity <UserEntity> login(@RequestBody UserRequest userRequest) throws UserNotFoundException {
+		if(!checkIfUserExists(userRequest.getEmail())){
+			throw new UserNotFoundException("Email non reconnu");
+		} else {
+			
+			UserEntity userInBase = userRepository.findByEmail(userRequest.getEmail());
+			String hashedPsw = userInBase.getPassword();
+			if(BCrypt.checkpw(userRequest.getEmail(), hashedPsw)) {
+				userInBase.setUserStatus(UserStatus.CONNECTED);
+				return new ResponseEntity<UserEntity>(userInBase, HttpStatus.ACCEPTED);
+			} else throw new UserNotFoundException("Mot de passe invalide");
+		}
+
+	}
 
 }
 

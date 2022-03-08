@@ -57,6 +57,9 @@ public class UserEntity {
 	@Column(name="USER_ROLE")
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
+	
+	@Enumerated(EnumType.STRING)
+	private UserStatus userStatus;
 
 	public Long getIdUser() {
 		return idUser;
@@ -122,6 +125,13 @@ public class UserEntity {
 		this.userRole = userRole;
 	}
 	
+	public UserStatus getUserStatus() {
+		return userStatus;
+	}
+
+	public void setUserStatus(UserStatus userStatus) {
+		this.userStatus = userStatus;
+	}
 	
 
 	

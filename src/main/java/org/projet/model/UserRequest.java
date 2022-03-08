@@ -12,10 +12,8 @@ public class UserRequest implements Serializable {
 
 	// Cette classe représente les données de l'utilisateur lorsqu'il rempli le formulaire de creation de compte. 
 
-	@NotEmpty(message="Champs obligatoire")
+	//Les champs firstname et lastname seront rendus obligatoires en Front
 	private String firstname;
-	
-	@NotEmpty(message="Champs obligatoire")
 	private String Lastname;
 	
 	@NotEmpty(message="Champs obligatoire")
