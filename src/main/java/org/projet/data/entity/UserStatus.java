@@ -1,4 +1,4 @@
-package org.projet.model;
+package org.projet.data.entity;
 
 public enum UserStatus {
 	CONNECTED,

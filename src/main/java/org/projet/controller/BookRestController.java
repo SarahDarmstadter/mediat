@@ -3,8 +3,10 @@ package org.projet.controller;
 
 import java.util.List;
 
-import org.projet.model.Book;
-import org.projet.model.BookRepository;
+import org.projet.data.entity.BookEntity;
+import org.projet.data.entity.BookRefEntity;
+import org.projet.data.repository.BookEntityRepository;
+import org.projet.data.repository.BookRefEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,16 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookRestController {
 	
 	@Autowired
-	BookRepository bookRepository;
+	BookEntityRepository bookEntityRepository;
 	
-	@GetMapping
-	public List <Book> findAllBooks(){
-		return bookRepository.findAll();
+	@Autowired
+	BookRefEntityRepository bookRefEntityRepository;
+	
+	@GetMapping("/allbooks")
+	public List <BookEntity> findAllBooks(){
+		return bookEntityRepository.findAll();
 	}
 	
 	@GetMapping("/{author}")
-	public List <Book> findByAuthor(@PathVariable String author ){
-		return bookRepository.findByAuthorIgnoreCase(author);
+	public List <BookRefEntity> findByAuthor(@PathVariable String author ){
+		return bookRefEntityRepository.findByAuthorIgnoreCase(author);
 	}
 	
 	

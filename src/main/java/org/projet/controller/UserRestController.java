@@ -1,21 +1,20 @@
 package org.projet.controller;
 
-import java.util.List;
-import java.util.Optional;
 
+
+import org.projet.data.DTO.UserDTO;
+import org.projet.data.entity.UserEntity;
+import org.projet.data.entity.UserStatus;
+import org.projet.data.repository.UserRepository;
 import org.projet.exceptions.UserAlreadyExistsException;
 import org.projet.exceptions.UserNotFoundException;
-import org.projet.model.UserEntity;
-import org.projet.model.UserRepository;
-import org.projet.model.UserRequest;
-import org.projet.model.UserRole;
-import org.projet.model.UserStatus;
+import org.projet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,81 +26,71 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users")
 public class UserRestController {
 
-	private String salt = "$2b$10$//DXiVVE59p7G5k/4Klx/e";
 
 	@Autowired
 	UserRepository userRepository;
 
-	//	@Autowired
-	//	BcryptEncoder bcryptEncorder;
-
+	@Autowired
+	UserService userService;
 
 	@GetMapping
-	public List <UserEntity> findAllUsers(){
-		return userRepository.findAll();
+	public ResponseEntity<UserEntity> getAllUser(){
+		userService.findAll();
+		return new ResponseEntity<UserEntity>(HttpStatus.ACCEPTED);
+
 	}
 
-	@GetMapping("/{idUser}")
-	public Optional<UserEntity> findUserById(@PathVariable Long idUser) {
-		return userRepository.findById(idUser);
+	@GetMapping("/{idUser}/profile")
+	public ResponseEntity<UserEntity> getUserById(@PathVariable Long idUser) throws UserNotFoundException {
+		userService.findbyId(idUser).orElseThrow(()-> new UserNotFoundException("id non reconnu"));
+		return new ResponseEntity<UserEntity>(HttpStatus.ACCEPTED);
 	}
 
 	@GetMapping("/search")
-	public UserEntity findUserByEmail(@RequestParam String email) throws UserNotFoundException {
-		return userRepository.findByEmail(email);
+	public ResponseEntity<UserEntity> findUserByEmail(@RequestParam String email) throws UserNotFoundException {
+		if(userService.checkIfUserExists(email)) {
+			return new ResponseEntity<UserEntity>(HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<UserEntity>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@PostMapping("/auth/signup")
-	public ResponseEntity <UserEntity> createUser(@RequestBody UserRequest userRequest) throws UserAlreadyExistsException {
+	public ResponseEntity <UserEntity> createUser(@RequestBody UserDTO userDTO) throws UserAlreadyExistsException {
 		//Check if user exists already
-		if(checkIfUserExists(userRequest.getEmail())) {
+		if(userService.checkIfUserExists(userDTO.getEmail())) {
 			throw new UserAlreadyExistsException("Email déjà utilisé");
 		} else {
-
-			UserEntity userEntity = new UserEntity();
-			userEntity.setPassword(BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt(salt)));
-			userEntity.setFirstName(userRequest.getFirstname());
-			userEntity.setLastName(userRequest.getLastname());
-			userEntity.setEmail(userRequest.getEmail());
-			userEntity.setUserRole(UserRole.USER);
-			userEntity.setUserStatus(UserStatus.CONNECTED);
-			userEntity = userRepository.save(userEntity);
-			return new ResponseEntity<UserEntity>(userEntity, HttpStatus.CREATED);
+			UserEntity newUser = userService.createUser(userDTO);
+			return new ResponseEntity<UserEntity>(newUser, HttpStatus.CREATED);
 		}
 	}
 
-	public boolean checkIfUserExists(String email) {
-		return userRepository.findByEmail(email) != null ? true : false;
-	}
-
+	
 	@PostMapping("/auth/login")
-	public ResponseEntity <UserEntity> login(@RequestBody UserRequest userRequest) throws UserNotFoundException {
-		if(!checkIfUserExists(userRequest.getEmail())){
+	public ResponseEntity <UserEntity> login(@RequestBody UserDTO userDTO) throws UserNotFoundException {
+		if(!userService.checkIfUserExists(userDTO.getEmail())){
 			throw new UserNotFoundException("Email non reconnu");
+		} else if(!userService.checkPassword(userDTO)){
+			return new ResponseEntity<UserEntity>(HttpStatus.BAD_REQUEST);
 		} else {
-			UserEntity userInBase = userRepository.findByEmail(userRequest.getEmail());
-			String hashedPsw = userInBase.getPassword();
-			System.out.println("hashed " + hashedPsw);
-			System.out.println("not hash " + userRequest.getPassword());
-
-			if((BCrypt.checkpw(userRequest.getPassword(), hashedPsw)) == false) {
-				System.out.println("LES MOTS DE PASSE NE MATCHENt PAS ");
-				throw new UserNotFoundException("mot de passe invalide");
-			} else {
-				System.out.println("LES MOTS DE PASSE  MATCHENT ");
-
-				userInBase.setUserStatus(UserStatus.CONNECTED);
-				return new ResponseEntity<UserEntity>(userInBase, HttpStatus.ACCEPTED);			
-			}
+			userService.findbyEmail(userDTO.getEmail()).setUserStatus(UserStatus.CONNECTED);
+			return new ResponseEntity<UserEntity>(HttpStatus.ACCEPTED);			
 		}
-
 	}
 
-	@DeleteMapping("/auth/{idUser}/delete")
-	public ResponseEntity <Void> deleteAccount(@PathVariable long idUser) throws UserNotFoundException{
-		userRepository.findById(idUser).orElseThrow(()-> new UserNotFoundException("Utilisateur non reconnu via son id :" + idUser ));
-		userRepository.deleteById(idUser);
-		
+	//Modification email / mot de passe // role et statut ?
+
+	@PatchMapping("/{idUser}/modify")
+	public ResponseEntity <UserEntity> modifyInfos(@PathVariable long id, @RequestBody UserDTO userDTO) throws UserNotFoundException{
+		UserEntity user = userService.findbyId(id).orElseThrow(()-> new UserNotFoundException("Utilisateur non reconnu via son id :" + id ));
+		userService.updateUser(user);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+	}
+
+	@DeleteMapping("/auth/{id}/delete")
+	public ResponseEntity <Void> deleteAccount(@PathVariable long id) throws UserNotFoundException{
+		userService.deleteUserById(id);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 	}
 

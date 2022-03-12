@@ -1,4 +1,5 @@
-package org.projet.model;
+package org.projet.data.DTO;
+
 
 import java.io.Serializable;
 
@@ -8,7 +9,7 @@ import lombok.Data;
 import lombok.Getter;
 
 @Data
-public class UserRequest implements Serializable {
+public class UserDTO implements Serializable {
 
 	// Cette classe représente les données de l'utilisateur lorsqu'il rempli le formulaire de creation de compte. 
 
