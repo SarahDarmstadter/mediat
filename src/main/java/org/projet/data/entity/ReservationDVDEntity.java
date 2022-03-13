@@ -13,7 +13,6 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name ="Reservation_DVD")
 public class ReservationDVDEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

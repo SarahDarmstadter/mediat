@@ -14,7 +14,6 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name= "CD_ref_entity")
 public class CDRefEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

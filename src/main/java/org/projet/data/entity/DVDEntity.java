@@ -11,7 +11,6 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="DVD")
 public class DVDEntity {
 
 	@Id
