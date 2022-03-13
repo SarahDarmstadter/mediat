@@ -42,7 +42,7 @@ public class DVDService {
 	
 	//Retrouver les dvd par type 
 	public List <DVDEntity> getAllDVDbyType(TypeDVD typeDvd){
-		return dvdEntityRepository.findByTypedvd(typeDvd);	
+		return dvdEntityRepository.findByTypeDvd(typeDvd);	
 	}
 	
 	//retrouver les DVD disponibles par reference et type

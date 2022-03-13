@@ -20,8 +20,6 @@ import lombok.Data;
 public class BookRefEntity  {
 	
 	
-	
-	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

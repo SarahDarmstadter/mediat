@@ -1,8 +1,12 @@
+
 package org.projet.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.projet.data.entity.BookEntity;
 import org.projet.data.entity.BookRefEntity;
@@ -63,6 +67,17 @@ public class BookService {
 
 	public BookEntity getBookById(Long id) {
 		return bookEntityRepository.getById(id);
+	}
+
+	public List<BookEntity> getBookByAuthorAndIsDispo(String author, boolean b) {
+		List <BookRefEntity> listRef = bookRefRepository.findByAuthorIgnoreCase(author);
+		List <BookEntity> listBookDispo = new ArrayList<>();
+		for (BookRefEntity bookRefEntity : listRef) {
+			List <BookEntity> bookDispo =  getAllBookDispoByRef(bookRefEntity);
+			listBookDispo.addAll(bookDispo);
+		}
+		return listBookDispo;
+		
 	}
 	
 }
