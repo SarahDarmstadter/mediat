@@ -19,8 +19,11 @@ public class DVDEntity {
 	
 	private boolean isDispo;
 	
+	private TypeDVD typeDvd;
+	
 	@ManyToOne
 	private DVDRefEntity reference;
+
 
 
 }

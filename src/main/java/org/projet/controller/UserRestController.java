@@ -2,6 +2,8 @@ package org.projet.controller;
 
 
 
+import java.util.List;
+
 import org.projet.data.DTO.UserDTO;
 import org.projet.data.entity.UserEntity;
 import org.projet.data.entity.UserStatus;
@@ -26,30 +28,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users")
 public class UserRestController {
 
-
-	@Autowired
-	UserRepository userRepository;
-
 	@Autowired
 	UserService userService;
 
 	@GetMapping
-	public ResponseEntity<UserEntity> getAllUser(){
-		userService.findAll();
-		return new ResponseEntity<UserEntity>(HttpStatus.ACCEPTED);
+	public List<UserEntity> getAllUser(){
+		return  userService.findAll();
 
 	}
 
-	@GetMapping("/{idUser}/profile")
-	public ResponseEntity<UserEntity> getUserById(@PathVariable Long idUser) throws UserNotFoundException {
-		userService.findbyId(idUser).orElseThrow(()-> new UserNotFoundException("id non reconnu"));
-		return new ResponseEntity<UserEntity>(HttpStatus.ACCEPTED);
+	@GetMapping("/{id}/profile")
+	public ResponseEntity<UserEntity> getUserById(@PathVariable Long id) throws UserNotFoundException {
+		UserEntity user = userService.findbyId(id)
+		.orElseThrow(()-> new UserNotFoundException("id non reconnu"));
+		
+		return new ResponseEntity<UserEntity>(user, HttpStatus.ACCEPTED);
 	}
 
 	@GetMapping("/search")
 	public ResponseEntity<UserEntity> findUserByEmail(@RequestParam String email) throws UserNotFoundException {
 		if(userService.checkIfUserExists(email)) {
-			return new ResponseEntity<UserEntity>(HttpStatus.ACCEPTED);
+			UserEntity user = userService.findbyEmail(email);
+			return new ResponseEntity<UserEntity>(user, HttpStatus.ACCEPTED);
 		} else {
 			return new ResponseEntity<UserEntity>(HttpStatus.NOT_FOUND);
 		}

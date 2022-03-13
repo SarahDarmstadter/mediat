@@ -56,5 +56,13 @@ public class BookService {
         }
         return bookEntityRepository.save(bookEntity);
 	}
+
+	public List<BookRefEntity> getAllRef() {
+		return bookRefRepository.findAll();
+	}
+
+	public BookEntity getBookById(Long id) {
+		return bookEntityRepository.getById(id);
+	}
 	
 }

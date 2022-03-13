@@ -2,9 +2,13 @@ package org.projet.service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.projet.data.entity.DVDEntity;
 import org.projet.data.entity.DVDRefEntity;
+import org.projet.data.entity.TypeDVD;
 import org.projet.data.repository.CDEntityRepository;
 import org.projet.data.repository.CDRefEntityRepository;
 import org.projet.data.repository.DVDEntityRepository;
@@ -27,13 +31,23 @@ public class DVDService {
 	}
 	
 	//Retrouver tous les dvd disponibles par reference 
-	public List <DVDEntity> getAllCDDispoByRef(DVDRefEntity reference){
+	public List <DVDEntity> getAllDVDDispoByRef(DVDRefEntity reference){
 		return dvdEntityRepository.findAllByisDispoAndReference(true, reference);
 	}
 	
-	//Compter le nombre de dvd disponibles d'une même référence 
+	//Compter le nombre de dvd d'une même référence 
 	public Integer getDVDDispoCountByRef(DVDRefEntity dvdReference) {
 		return dvdEntityRepository.countAllByReference(dvdReference);
+	}
+	
+	//Retrouver les dvd par type 
+	public List <DVDEntity> getAllDVDbyType(TypeDVD typeDvd){
+		return dvdEntityRepository.findByTypedvd(typeDvd);	
+	}
+	
+	//retrouver les DVD disponibles par reference et type
+	public List <DVDEntity> getDvdDispoByRefAndType(@Valid DVDRefEntity reference, TypeDVD typeDvd){
+		return dvdEntityRepository.findAllByisDispoAndReferenceAndTypeDvd(true, reference, typeDvd );
 	}
 	
 	// Retrouver tous les dvd d'un réalisateur
@@ -46,9 +60,11 @@ public class DVDService {
 		//verifions qu'il existe en bdd
 		DVDEntity dvd = dvdEntityRepository.findById(dvdEntity.getId())
 							.orElseThrow(() -> new NoSuchElementException("Le DVD " + dvdEntity.getId() + " n'existe pas."));
-		return dvdEntity.getIsDispo();	
+		return dvdEntity.getIsDispo();
 		
 	}
+	
+	
 
 	//Updater un dvd (dispo / plus dispo)
 	public DVDEntity updateDvd(DVDEntity dvdEntity) {
