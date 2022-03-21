@@ -4,20 +4,12 @@ package org.projet.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.projet.data.DTO.BookDTO;
 import org.projet.data.entity.BookEntity;
 import org.projet.data.entity.BookRefEntity;
-import org.projet.data.entity.UserEntity;
-import org.projet.data.entity.UserRole;
-import org.projet.data.entity.UserStatus;
 import org.projet.data.repository.BookEntityRepository;
 import org.projet.data.repository.BookRefEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -92,10 +84,11 @@ public class BookService {
 		bookRefEntity.setIsbnNumber(bookDTO.getIsbnNumber());
 		bookRefEntity.setPublicationDate(bookDTO.getPublicationDate());
 		bookRefEntity.setTitle(bookDTO.getTitle());
+		bookRefEntity.setCopies(bookDTO.getCopies());
 		bookRefEntity = bookRefRepository.save(bookRefEntity);
 		List <BookEntity> bookList = new ArrayList<BookEntity>();
 
-		for (int i = 0; i < bookDTO.getCopyNumber(); i++) {
+		for (int i = 0; i < bookDTO.getCopies(); i++) {
 
 			BookEntity bookEntity = new BookEntity();
 			bookEntity.setIsDispo(true);
@@ -116,7 +109,25 @@ public class BookService {
 		return true;
 	}
 
+	// supprimer un livre en particulier sans supprimer la réference
+	public void deleteBookById(Long id) {
+		BookEntity book = bookEntityRepository.getById(id);
+		bookEntityRepository.delete(book);
+		BookRefEntity bookRef = bookRefRepository.getById(book.getId());
+		bookRef.setCopies(bookRef.getCopies()-1);	
+		updateBookRef(bookRef);
+	}
 
+	// mise à jour du bookRefEntity 
+	
+	public BookRefEntity updateBookRef(BookRefEntity bookRefEntity) {
+		if (!bookRefRepository.existsById(bookRefEntity.getId())) {
+			throw new NoSuchElementException("Le livre " + bookRefEntity.getId() + " n'existe pas.");
+		}
+		return bookRefRepository.save(bookRefEntity);
+	}
+	
+	
 	
 
 

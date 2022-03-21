@@ -11,4 +11,6 @@ public interface DVDRefEntityRepository extends JpaRepository<DVDRefEntity, Long
 
 	public List<DVDRefEntity> findByDirectorIgnoreCase(String director);
 
+	public DVDRefEntity findByTitle(String title);
+
 }

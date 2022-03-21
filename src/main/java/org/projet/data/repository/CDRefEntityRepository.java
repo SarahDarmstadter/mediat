@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CDRefEntityRepository extends JpaRepository<CDRefEntity, Long> {
 
-	List<CDRefEntity> findByArtistIgnoreCase(String artist);
+	public List<CDRefEntity> findByArtistIgnoreCase(String artist);
+
+	public CDRefEntity findByTitle(String title);
 
 }

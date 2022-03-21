@@ -7,21 +7,24 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class BookDTO implements Serializable {
+public class CDDTO implements Serializable {
 
-// Cette classe représente la creation d'un livre en bdd. 
+// Cette classe représente la creation d'un CD en bdd. 
 
 	@NotNull
 	private String title;
 	
 	@NotNull
-	private String author;
+	private String artist;
     
 	@NotNull
 	private LocalDateTime publicationDate;
 
 	@NotNull
-	private Integer isbnNumber;
+	private Integer songNumber;
+
+	@NotNull
+    private Integer duration;
 	
 	@NotNull
 	private Integer copies;

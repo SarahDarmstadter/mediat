@@ -25,9 +25,12 @@ public class DVDRefEntity {
 
     private LocalDateTime publicationDate;
 
-    private Integer duree;
+    private Integer duration;
     
     private TypeDVD type;
+    
+	private Integer copies;
+
     
     @OneToMany
     private List <DVDEntity> dvdList;

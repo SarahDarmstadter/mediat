@@ -29,6 +29,8 @@ public class CDRefEntity {
 
     private Integer duration;
     
+    private Integer copies;
+    
     @OneToMany
     private List <CDEntity> cdList;
 }

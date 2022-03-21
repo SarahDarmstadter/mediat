@@ -29,6 +29,10 @@ public class DVDEntity {
 		return this.isDispo;
 	}
 
+	public void setIsDispo(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }

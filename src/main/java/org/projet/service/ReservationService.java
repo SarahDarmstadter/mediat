@@ -121,7 +121,7 @@ public class ReservationService {
 		}
 
 		// Rendre le disque indispo
-		dvd.setDispo(false);
+		dvd.setIsDispo(false);
 		dvd = dvdService.updateDvd(dvd);
 
 		// Créer une réservation

@@ -36,8 +36,11 @@ public class BookRefEntity  {
 	@Column(name="isbn_book")
 	private Integer isbnNumber;
 	
+	@Column(name="copy_number")
+	private Integer copies;
+	
 	@OneToMany
 	private List <BookEntity> bookEntity;
     
-
+	
 }
