@@ -27,4 +27,11 @@ public class BookEntity  {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	 @JoinColumn(name = "book_ref_entity_id", nullable = false)
 	private BookRefEntity reference;
+
+	public void setReference(BookRefEntity id_bookReference) {
+		this.reference= id_bookReference;
+		
+	}
+
+	
 }

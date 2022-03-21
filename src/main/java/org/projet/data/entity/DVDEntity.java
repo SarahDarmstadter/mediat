@@ -24,6 +24,11 @@ public class DVDEntity {
 	@ManyToOne
 	private DVDRefEntity reference;
 
+	public boolean getIsDispo() {
+		// TODO Auto-generated method stub
+		return this.isDispo;
+	}
+
 
 
 }

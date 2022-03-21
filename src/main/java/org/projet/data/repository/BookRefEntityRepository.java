@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRefEntityRepository extends JpaRepository<BookRefEntity, Long> {
 
-	List<BookRefEntity> findByAuthorIgnoreCase(String author);
+	public List<BookRefEntity> findByAuthorIgnoreCase(String author);
+
+	public BookRefEntity findByTitle(String title);
 
 }
