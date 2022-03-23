@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.projet.data.entity.BookEntity;
+import org.projet.data.entity.BookRefEntity;
 import org.projet.data.entity.CDEntity;
 import org.projet.data.entity.DVDEntity;
 import org.projet.data.entity.ReservationBookEntity;
@@ -49,9 +50,8 @@ public class ReservationService {
 	public List<ReservationDVDEntity> getAllReservationDVD() {
 		return reservationDVDEntityRepository.findAll();
 	}
-	
-	// Get all reservation par USER
-	
+
+
 
 	//RESERVER UN LIVRE 
 	public ReservationBookEntity reserverBook(BookEntity book, UserEntity user) throws Exception {
@@ -65,22 +65,35 @@ public class ReservationService {
 			throw new Exception("La personne " + user.getId() + " ne peut plus rien réserver.");
 		}
 
-		// Rendre le livre indispo
-		book.setIsDispo(false);
-		book = bookService.updateBook(book);
-
 		// Créer une réservation
 		ReservationBookEntity reservation = new ReservationBookEntity();
 		reservation.setBook(book);
 		reservation.setBorrowingDate(LocalDateTime.now());
 		reservation.setReturningDate(LocalDateTime.now().plusDays(7));
 		reservation.setUser(user);
+
+
+		// Rendre le livre indispo
+		book.setIsDispo(false);
+		book = bookService.updateBook(book);
+
 		return saveReservationBook(reservation);
 	}
 
 	private ReservationBookEntity saveReservationBook(ReservationBookEntity reservation) {
 		return reservationBookEntityRepository.save(reservation);
 	}
+	
+	// Annuler une reservation de livre 
+	public void cancelResaBookById(Long id) {
+		ReservationBookEntity reservation = reservationBookEntityRepository.getById(id);
+		BookEntity book = reservation.getBook();
+		book.setIsDispo(true);
+		bookService.updateBook(book);
+		reservationBookEntityRepository.delete(reservation);
+	}
+	
+	
 
 	//RESERVER UN CD
 	public ReservationCDEntity reserverCD(CDEntity cd, UserEntity user) throws Exception {
@@ -107,9 +120,22 @@ public class ReservationService {
 		return saveReservationCD(reservation);
 	}
 
+
 	private ReservationCDEntity saveReservationCD(ReservationCDEntity reservation) {
 		return reservationCDEntityRepository.save(reservation);
 	}
+	
+	// annuler une reservation de CD
+	
+	public void cancelResaCDById(Long id) {
+		ReservationCDEntity reservation = reservationCDEntityRepository.getById(id);
+		CDEntity cd = reservation.getCd();
+		cd.setIsDispo(true);
+		cdService.updateCd(cd);
+		reservationCDEntityRepository.delete(reservation);
+	}
+
+
 
 	//RESERVER UN DVD 
 	public ReservationDVDEntity reserverDVD(DVDEntity dvd, UserEntity user) throws Exception {
@@ -139,6 +165,15 @@ public class ReservationService {
 	private ReservationDVDEntity saveReservationDVD(ReservationDVDEntity reservation) {
 		return reservationDVDEntityRepository.save(reservation);
 	}
+	
+	// annuler une reservation de DVD 
+	public void cancelResaDVDById(Long id) {
+		ReservationDVDEntity reservation = reservationDVDEntityRepository.getById(id);
+		DVDEntity dvd = reservation.getDvd();
+		dvd.setIsDispo(true);
+		dvdService.updateDvd(dvd);
+		reservationDVDEntityRepository.delete(reservation);
+	}
 
 	public Integer getReservationBookByUser(UserEntity user) {
 		return reservationBookEntityRepository.countAllByUser(user);
@@ -151,10 +186,11 @@ public class ReservationService {
 	public Integer getReservationDVDByUser(UserEntity user) {
 		return reservationDVDEntityRepository.countAllByUser(user);
 	}
-	
+
 	public Integer getNbReservation(UserEntity user) {
 		return getReservationBookByUser(user) + getReservationCDByUser(user) + getReservationDVDByUser(user);
 	}
+
 
 
 

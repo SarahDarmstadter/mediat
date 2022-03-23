@@ -15,8 +15,10 @@ import javax.persistence.Table;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+
 @Entity
 @Data
 public class UserEntity {
@@ -50,13 +52,16 @@ public class UserEntity {
 		@Enumerated(EnumType.STRING)
 		private UserStatus userStatus;
 		
-		@OneToMany
+		@OneToMany(mappedBy = "user")
+		@JsonIgnore
 		private List<ReservationBookEntity> reservationBookEntity;
 		
-		@OneToMany
+		@OneToMany(mappedBy = "user")
+		@JsonIgnore
 		private List <ReservationCDEntity> reservationCDEntity;
 		
-		@OneToMany
+		@OneToMany(mappedBy = "user")
+		@JsonIgnore
 		private List <ReservationDVDEntity> reservationDVDEntity;
 
 		

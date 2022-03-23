@@ -1,7 +1,8 @@
 spring:
   jpa:
+    show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 
   datasource:
     url: jdbc:postgresql:mediatheque-postgresql
@@ -11,4 +12,3 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
-      

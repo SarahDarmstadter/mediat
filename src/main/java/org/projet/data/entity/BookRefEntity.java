@@ -3,20 +3,22 @@ package org.projet.data.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 
 @Data
 @Entity
-@JsonInclude(JsonInclude.Include.ALWAYS)
-
 public class BookRefEntity  {
 	
 	
@@ -39,7 +41,8 @@ public class BookRefEntity  {
 	@Column(name="copy_number")
 	private Integer copies;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "reference", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List <BookEntity> bookEntity;
     
 	

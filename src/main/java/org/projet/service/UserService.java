@@ -64,6 +64,9 @@ public class UserService {
 		return userRepository.findById(id);
 	}
 
+	public UserEntity getById(Long id) {
+		return userRepository.getById(id);
+	}
 
 	public List <UserEntity> findAll() {
 		return userRepository.findAll();
@@ -101,23 +104,23 @@ public class UserService {
 	}
 	
 	public ReservationBookEntity getReservationBookByUser(UserEntity userEntity) {
-		return reservationBookRepository.findByUserEntity(userEntity);
+		return reservationBookRepository.findByUser(userEntity);
 			
 	}
 	
 	public ReservationCDEntity getReservationCDByUser(UserEntity userEntity) {
-		return reservationCDRepository.findByUserEntity(userEntity);		
+		return reservationCDRepository.findByUser(userEntity);		
 	}
 	
 	public ReservationDVDEntity getReservationDVDByUser(UserEntity userEntity) {
-		return reservationDVDRepository.findByUserEntity(userEntity);
+		return reservationDVDRepository.findByUser(userEntity);
 	}
 	
 	public List<Object> getAllReservationByUser(UserEntity userEntity){
 		List<Object> reservationList = new ArrayList<Object>();
-		ReservationBookEntity reservationBook = reservationBookRepository.findByUserEntity(userEntity);
-		ReservationCDEntity reservationCD = reservationCDRepository.findByUserEntity(userEntity);
-		ReservationDVDEntity reservationDVD = reservationDVDRepository.findByUserEntity(userEntity);
+		ReservationBookEntity reservationBook = reservationBookRepository.findByUser(userEntity);
+		ReservationCDEntity reservationCD = reservationCDRepository.findByUser(userEntity);
+		ReservationDVDEntity reservationDVD = reservationDVDRepository.findByUser(userEntity);
 		reservationList.add(reservationBook);
 		reservationList.add(reservationDVD);
 		reservationList.add(reservationCD);

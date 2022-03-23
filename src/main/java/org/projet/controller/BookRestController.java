@@ -14,6 +14,7 @@ import org.projet.data.repository.BookEntityRepository;
 import org.projet.data.repository.BookRefEntityRepository;
 import org.projet.exceptions.BookAlreadyExistsException;
 import org.projet.exceptions.BookNotFoundException;
+import org.projet.exceptions.ReservationNotFoundException;
 import org.projet.exceptions.UserAlreadyExistsException;
 import org.projet.exceptions.UserNotFoundException;
 import org.projet.service.BookService;
@@ -76,9 +77,9 @@ public class BookRestController {
 		 return bookService.getAllBookByRef(bookRef);
 	}
 	
-	@PostMapping("/{idBook}/reserver")
-	public ResponseEntity <ReservationBookEntity> reserverBook(@PathVariable Long idBook, @RequestBody String email) throws Exception{
-		UserEntity user = userService.findbyEmail(email);
+	@PostMapping("/{idBook}/{idUser}/reserver")
+	public ResponseEntity <ReservationBookEntity> reserverBook(@PathVariable Long idBook, @PathVariable Long idUser ) throws Exception{
+		UserEntity user = userService.getById(idUser);
 		BookEntity book = bookService.getBookById(idBook);
 		ReservationBookEntity resaBook = reservationService.reserverBook(book, user);
 		return new ResponseEntity<ReservationBookEntity>(resaBook, HttpStatus.CREATED);
@@ -101,6 +102,14 @@ public class BookRestController {
 		bookService.deleteBookById(id);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 	}
+	
+	
+	@DeleteMapping("/{idReservation}/cancelReservation")
+	public ResponseEntity <Void> deleteResaBook(@PathVariable Long idReservation) throws ReservationNotFoundException{
+		reservationService.cancelResaBookById(idReservation);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+	}
+	
 	
 	
 }

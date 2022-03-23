@@ -5,11 +5,18 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.projet.data.DTO.CDDTO;
+import org.projet.data.entity.BookEntity;
 import org.projet.data.entity.CDEntity;
 import org.projet.data.entity.CDRefEntity;
+import org.projet.data.entity.ReservationBookEntity;
+import org.projet.data.entity.ReservationCDEntity;
+import org.projet.data.entity.UserEntity;
 import org.projet.exceptions.CDAlreadyExistsException;
 import org.projet.exceptions.CDNotFoundException;
+import org.projet.exceptions.ReservationNotFoundException;
 import org.projet.service.CDService;
+import org.projet.service.ReservationService;
+import org.projet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +36,12 @@ public class CDRestController {
 
 	@Autowired
 	CDService cdService;
+	
+	@Autowired
+	UserService userService;
+	
+	@Autowired
+	ReservationService reservationService;
 
 	@GetMapping("/alldisques")
 	public List <CDRefEntity> findAllCd(){
@@ -77,6 +90,19 @@ public class CDRestController {
 	public ResponseEntity <Void> deleteCDRef(@PathVariable long id) throws NoSuchElementException{
 		cdService.deleteCDRefById(id);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-		}
+	}
 	
+	@PostMapping("/{idDvd}/{idUser}/reserver")
+	public ResponseEntity <ReservationCDEntity> reserverCD(@PathVariable Long idCD, @PathVariable Long idUser ) throws Exception{
+		UserEntity user = userService.getById(idUser);
+		CDEntity cd = cdService.getCDById(idCD);
+		ReservationCDEntity resaCD = reservationService.reserverCD(cd, user);
+		return new ResponseEntity<ReservationCDEntity>(resaCD, HttpStatus.CREATED);
+	}
+	
+	@DeleteMapping("/{idReservation}/cancelReservation")
+	public ResponseEntity <Void> deleteResaCD(@PathVariable Long idReservation) throws ReservationNotFoundException{
+		reservationService.cancelResaCDById(idReservation);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+	}
 }
