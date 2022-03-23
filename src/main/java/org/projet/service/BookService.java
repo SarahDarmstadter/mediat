@@ -4,6 +4,8 @@ package org.projet.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.projet.data.DTO.BookDTO;
 import org.projet.data.entity.BookEntity;
 import org.projet.data.entity.BookRefEntity;
@@ -29,6 +31,10 @@ public class BookService {
 	//Retrouver tous les livres disponibles par reference 
 	public List <BookEntity> getAllBookDispoByRef(BookRefEntity reference){
 		return bookEntityRepository.findAllByisDispoAndReference(true, reference);
+	}
+	
+	public List <BookEntity> getAllBookByRef(Optional<BookRefEntity> bookRef){
+		return bookEntityRepository.findAllByReference(bookRef);
 	}
 
 	//Compter le nombre de livres disponibles d'une même référence 
@@ -126,6 +132,11 @@ public class BookService {
 		}
 		return bookRefRepository.save(bookRefEntity);
 	}
+
+	public Optional<BookRefEntity> getRefById(Long id) {
+		return bookRefRepository.findById(id);
+	}
+
 	
 	
 	

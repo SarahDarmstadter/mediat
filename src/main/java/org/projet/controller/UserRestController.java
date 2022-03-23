@@ -3,11 +3,9 @@ package org.projet.controller;
 
 
 import java.util.List;
-
 import org.projet.data.DTO.UserDTO;
 import org.projet.data.entity.UserEntity;
 import org.projet.data.entity.UserStatus;
-import org.projet.data.repository.UserRepository;
 import org.projet.exceptions.UserAlreadyExistsException;
 import org.projet.exceptions.UserNotFoundException;
 import org.projet.service.UserService;
@@ -55,6 +53,29 @@ public class UserRestController {
 		}
 	}
 
+	@GetMapping("/{id}/reservations")
+	public List<Object> getAllReseravtions(@PathVariable Long id) throws UserNotFoundException{
+		UserEntity user = userService.findbyId(id)
+				.orElseThrow(()-> new UserNotFoundException("id non reconnu"));
+		
+		return userService.getAllReservationByUser(user);
+	}
+	
+	
+	
+	
+//	@GetMapping("/reservationByUser")
+//	public List <Object> getAllResaByUser(@RequestParam String email) throws UserNotFoundException{
+//		if(userService.findbyEmail(email) == null){
+//			throw new UserNotFoundException("bookRef déjà en base");
+//		} else {
+//			UserEntity user = userService.findbyEmail(email);
+//			return userService.getAllReservationByUser(user);
+//		}
+//	}
+	
+	
+	
 	@PostMapping("/auth/signup")
 	public ResponseEntity <UserEntity> createUser(@RequestBody UserDTO userDTO) throws UserAlreadyExistsException {
 		//Check if user exists already
@@ -93,6 +114,7 @@ public class UserRestController {
 		userService.deleteUserById(id);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 	}
+
 
 
 }

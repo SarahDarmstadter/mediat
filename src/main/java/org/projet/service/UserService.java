@@ -1,11 +1,18 @@
 package org.projet.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.projet.data.DTO.UserDTO;
+import org.projet.data.entity.ReservationBookEntity;
+import org.projet.data.entity.ReservationCDEntity;
+import org.projet.data.entity.ReservationDVDEntity;
 import org.projet.data.entity.UserEntity;
 import org.projet.data.entity.UserRole;
 import org.projet.data.entity.UserStatus;
+import org.projet.data.repository.ReservationBookEntityRepository;
+import org.projet.data.repository.ReservationCDEntityRepository;
+import org.projet.data.repository.ReservationDVDEntityRepository;
 import org.projet.data.repository.UserRepository;
 import org.projet.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +25,16 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ReservationBookEntityRepository reservationBookRepository;
+	
+	@Autowired
+	private ReservationCDEntityRepository reservationCDRepository;
+	
+	@Autowired
+	private ReservationDVDEntityRepository reservationDVDRepository;
+	
 
 	private String salt = "$2b$10$//DXiVVE59p7G5k/4Klx/e";
 
@@ -83,6 +100,32 @@ public class UserService {
 			userRepository.delete(user);
 	}
 	
+	public ReservationBookEntity getReservationBookByUser(UserEntity userEntity) {
+		return reservationBookRepository.findByUserEntity(userEntity);
+			
+	}
+	
+	public ReservationCDEntity getReservationCDByUser(UserEntity userEntity) {
+		return reservationCDRepository.findByUserEntity(userEntity);		
+	}
+	
+	public ReservationDVDEntity getReservationDVDByUser(UserEntity userEntity) {
+		return reservationDVDRepository.findByUserEntity(userEntity);
+	}
+	
+	public List<Object> getAllReservationByUser(UserEntity userEntity){
+		List<Object> reservationList = new ArrayList<Object>();
+		ReservationBookEntity reservationBook = reservationBookRepository.findByUserEntity(userEntity);
+		ReservationCDEntity reservationCD = reservationCDRepository.findByUserEntity(userEntity);
+		ReservationDVDEntity reservationDVD = reservationDVDRepository.findByUserEntity(userEntity);
+		reservationList.add(reservationBook);
+		reservationList.add(reservationDVD);
+		reservationList.add(reservationCD);
+		
+		return reservationList;
+
+	}
+	
 	
 }
 
@@ -94,11 +137,7 @@ public class UserService {
 
 
 
-//	//methode pour find all
-//	verifier que le user exist 
-//	le creer 
-//	crypter mot de passe
-//	le mettre a jour 
+
 
 
 

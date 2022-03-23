@@ -49,6 +49,9 @@ public class ReservationService {
 	public List<ReservationDVDEntity> getAllReservationDVD() {
 		return reservationDVDEntityRepository.findAll();
 	}
+	
+	// Get all reservation par USER
+	
 
 	//RESERVER UN LIVRE 
 	public ReservationBookEntity reserverBook(BookEntity book, UserEntity user) throws Exception {

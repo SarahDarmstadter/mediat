@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReservationBookEntityRepository extends JpaRepository<ReservationBookEntity, Long> {
 
-	Integer countAllByUser(UserEntity user);
+	public Integer countAllByUser(UserEntity user);
+	public ReservationBookEntity findByUserEntity(UserEntity userEntity);
 
 }
