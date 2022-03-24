@@ -104,7 +104,7 @@ public class DVDService {
 		dvdRefEntity.setDirector(dvdDTO.getDirector());
 		dvdRefEntity.setDuration(dvdDTO.getDuration());
 		dvdRefEntity.setCopies(dvdDTO.getCopies());
-		dvdRefEntity.setType(dvdDTO.getTypeDvd());
+//		dvdRefEntity.setType(dvdDTO.getTypeDvd());
 		dvdRefEntity.setPublicationDate(dvdDTO.getPublicationDate());
 		dvdRefEntity.setTitle(dvdDTO.getTitle());
 		dvdRefEntity = dvdRefRepository.save(dvdRefEntity);

@@ -34,8 +34,6 @@ public class DVDRefEntity {
 
     private Integer duration;
     
-    @Enumerated
-    private TypeDVD type;
     
 	private Integer copies;
 
