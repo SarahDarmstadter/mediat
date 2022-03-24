@@ -11,6 +11,8 @@ import org.projet.data.entity.BookEntity;
 import org.projet.data.entity.BookRefEntity;
 import org.projet.data.repository.BookEntityRepository;
 import org.projet.data.repository.BookRefEntityRepository;
+import org.projet.exceptions.BookAlreadyExistsException;
+import org.projet.exceptions.BookNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +34,7 @@ public class BookService {
 	public List <BookEntity> getAllBookDispoByRef(BookRefEntity reference){
 		return bookEntityRepository.findAllByisDispoAndReference(true, reference);
 	}
-	
+
 	public List <BookEntity> getAllBookByRef(Optional<BookRefEntity> bookRef){
 		return bookEntityRepository.findAllByReference(bookRef);
 	}
@@ -84,62 +86,78 @@ public class BookService {
 	}
 
 	//Enregistrer des livres 
-	public List<BookEntity> createBook(BookDTO bookDTO) {
-		BookRefEntity bookRefEntity = new BookRefEntity();
-		bookRefEntity.setAuthor(bookDTO.getAuthor());
-		bookRefEntity.setIsbnNumber(bookDTO.getIsbnNumber());
-		bookRefEntity.setPublicationDate(bookDTO.getPublicationDate());
-		bookRefEntity.setTitle(bookDTO.getTitle());
-		bookRefEntity.setCopies(bookDTO.getCopies());
-		bookRefEntity = bookRefRepository.save(bookRefEntity);
-		List <BookEntity> bookList = new ArrayList<BookEntity>();
+	public List<BookEntity> createBook(BookDTO bookDTO) throws BookAlreadyExistsException {
 
-		for (int i = 0; i < bookDTO.getCopies(); i++) {
+		if(bookRefRepository.findByTitle(bookDTO.getTitle()) !=null) {
+			throw new BookAlreadyExistsException("Le livre est déjà en base");
+		} else {
+			BookRefEntity bookRefEntity = new BookRefEntity();
+			bookRefEntity.setAuthor(bookDTO.getAuthor());
+			bookRefEntity.setIsbnNumber(bookDTO.getIsbnNumber());
+			bookRefEntity.setPublicationDate(bookDTO.getPublicationDate());
+			bookRefEntity.setTitle(bookDTO.getTitle());
+			bookRefEntity.setCopies(bookDTO.getCopies());
+			bookRefEntity = bookRefRepository.save(bookRefEntity);
+			List <BookEntity> bookList = new ArrayList<BookEntity>();
 
-			BookEntity bookEntity = new BookEntity();
-			bookEntity.setIsDispo(true);
-			bookEntity.setReference(bookRefEntity);
-			bookEntityRepository.save(bookEntity);	
-			bookList.add(bookEntity);
+			for (int i = 0; i < bookDTO.getCopies(); i++) {
 
-		} bookRefEntity.setBookEntity(bookList);	
+				BookEntity bookEntity = new BookEntity();
+				bookEntity.setIsDispo(true);
+				bookEntity.setReference(bookRefEntity);
+				bookEntityRepository.save(bookEntity);	
+				bookList.add(bookEntity);
+
+			} bookRefEntity.setBookEntity(bookList);	
 			return bookList;
+		}	
 
 	}
 
-	public boolean checkIfBookExists(String title) {
+	public boolean checkIfBookRefExists(String title) {
 		if(bookRefRepository.findByTitle(title) == null) {
 			return false;
 		}
-		
 		return true;
 	}
 
 	// supprimer un livre en particulier sans supprimer la réference
-	public void deleteBookById(Long id) {
+	public void deleteBookById(Long id) throws BookNotFoundException{
 		BookEntity book = bookEntityRepository.getById(id);
-		bookEntityRepository.delete(book);
-		BookRefEntity bookRef = bookRefRepository.getById(book.getId());
-		bookRef.setCopies(bookRef.getCopies()-1);	
-		updateBookRef(bookRef);
+		if(book == null) {
+			throw new BookNotFoundException("Le livre ayant pour id " + id +" n'existe pas");
+		} else {
+			bookEntityRepository.delete(book);
+			BookRefEntity bookRef = bookRefRepository.getById(book.getId());
+			bookRef.setCopies(bookRef.getCopies()-1);	
+			updateBookRef(bookRef);
+		}
 	}
 
 	// mise à jour du bookRefEntity 
-	
-	public BookRefEntity updateBookRef(BookRefEntity bookRefEntity) {
-		if (!bookRefRepository.existsById(bookRefEntity.getId())) {
-			throw new NoSuchElementException("Le livre " + bookRefEntity.getId() + " n'existe pas.");
+
+	public BookRefEntity updateBookRef(BookRefEntity bookRefUpdate) throws BookNotFoundException {
+		if (bookRefRepository.getById(bookRefUpdate.getId()) == null) {
+			throw new BookNotFoundException("Le livre n'existe pas.");
+		} else {
+			BookRefEntity bookRefEntity = bookRefRepository.getById(bookRefUpdate.getId());
+			bookRefEntity.setAuthor(bookRefUpdate.getAuthor());
+			bookRefEntity.setCopies(bookRefUpdate.getCopies());
+			bookRefEntity.setIsbnNumber(bookRefUpdate.getIsbnNumber());
+			bookRefEntity.setPublicationDate(bookRefUpdate.getPublicationDate());
+			bookRefEntity.setTitle(bookRefUpdate.getTitle());
+			bookRefEntity.setBookEntity(bookRefUpdate.getBookEntity());
+			return bookRefRepository.save(bookRefEntity);
 		}
-		return bookRefRepository.save(bookRefEntity);
 	}
 
 	public Optional<BookRefEntity> getRefById(Long id) {
 		return bookRefRepository.findById(id);
 	}
 
-	
-	
-	
+
+
+
 
 
 }

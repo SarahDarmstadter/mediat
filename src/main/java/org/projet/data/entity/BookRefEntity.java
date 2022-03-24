@@ -38,7 +38,7 @@ public class BookRefEntity  {
 	@Column(name="isbn_book")
 	private Integer isbnNumber;
 	
-	@Column(name="copy_number")
+	@Column(name="copies")
 	private Integer copies;
 	
 	@OneToMany(mappedBy = "reference", cascade = CascadeType.ALL)

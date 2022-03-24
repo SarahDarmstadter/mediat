@@ -88,7 +88,7 @@ public class BookRestController {
 	@PostMapping("/addBooks")
 	public ResponseEntity <BookEntity> addBook(@RequestBody BookDTO bookDTO) throws BookAlreadyExistsException {
 		
-		if(bookService.checkIfBookExists(bookDTO.getTitle())) {
+		if(bookService.checkIfBookRefExists(bookDTO.getTitle())) {
 			throw new BookAlreadyExistsException("bookRef déjà en base");
 		} else {
 			List<BookEntity> newBooks = bookService.createBook(bookDTO);

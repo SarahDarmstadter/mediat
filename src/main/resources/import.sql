@@ -4,10 +4,10 @@ insert into user_entity (firstname, lastname, email, password, role, user_status
 insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'QUATRE', 'test4@test.com','Password123!', 'user', 'connected');
 
 
-insert into book_ref_entity (author_book, isbn_book, pub_date_book, copy_number, title_book) values ('Auteur UN', '1234567', '03-24-2022', 3, 'Le Crimier apprend à coder');
-insert into book_ref_entity (author_book, isbn_book, pub_date_book, copy_number, title_book) values ('Auteur Deux', '1234568', '01-26-1997', 3, 'Les tribulations du Crimier vol 1');
-insert into book_ref_entity (author_book, isbn_book, pub_date_book, copy_number, title_book) values ('Auteur Trois', '1239567', '02-24-2009', 3, 'Le crimier se reconverti');
-insert into book_ref_entity (author_book, isbn_book, pub_date_book, copy_number, title_book) values ('Auteur Quatre', '1884567', '03-07-2012', 3, 'Le décors');
+insert into book_ref_entity (author_book, isbn_book, pub_date_book, copies, title_book) values ('Auteur UN', '1234567', '03-24-2022', 3, 'Le Crimier apprend à coder');
+insert into book_ref_entity (author_book, isbn_book, pub_date_book, copies, title_book) values ('Auteur Deux', '1234568', '01-26-1997', 3, 'Les tribulations du Crimier vol 1');
+insert into book_ref_entity (author_book, isbn_book, pub_date_book, copies, title_book) values ('Auteur Trois', '1239567', '02-24-2009', 3, 'Le crimier se reconverti');
+insert into book_ref_entity (author_book, isbn_book, pub_date_book, copies, title_book) values ('Auteur Quatre', '1884567', '03-07-2012', 3, 'Le décors');
 
 insert into cd_ref_entity (artist, copies, duration, publication_date, song_number, title) values ('Enrico Sangiuliano', 2, 190, '12-24-1992', 12, 'Biomorph');
 insert into cd_ref_entity (artist, copies, duration, publication_date, song_number, title) values ('Vald', 2, 170, '02-24-2022', 10, 'Depression');

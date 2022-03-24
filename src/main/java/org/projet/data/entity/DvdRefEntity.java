@@ -34,7 +34,6 @@ public class DvdRefEntity {
 
     private Integer duration;
     
-    
 	private Integer copies;
 
 	@OneToMany(mappedBy = "reference", cascade = CascadeType.ALL)

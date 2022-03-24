@@ -25,7 +25,7 @@ public class BookEntity  {
 	@Column(name="isDispo")
 	private Boolean isDispo;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	 @JoinColumn(name = "reference_id", nullable = false)
 	private BookRefEntity reference;
 
