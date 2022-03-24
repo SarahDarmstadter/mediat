@@ -65,7 +65,7 @@ public class DVDService {
 		//verifions qu'il existe en bdd
 		DVDEntity dvd = dvdEntityRepository.findById(dvdEntity.getId())
 							.orElseThrow(() -> new NoSuchElementException("Le DVD " + dvdEntity.getId() + " n'existe pas."));
-		return dvdEntity.getIsDispo();
+		return dvd.getIsDispo();
 		
 	}
 	

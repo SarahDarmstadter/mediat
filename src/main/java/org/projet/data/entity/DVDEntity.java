@@ -1,5 +1,6 @@
 package org.projet.data.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,22 +18,16 @@ public class DVDEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private boolean isDispo;
+	@Column(name="isDispo")
+	private Boolean isDispo;
 	
 	private TypeDVD typeDvd;
 	
 	@ManyToOne
 	private DVDRefEntity reference;
 
-	public boolean getIsDispo() {
-		// TODO Auto-generated method stub
-		return this.isDispo;
-	}
-
-	public void setIsDispo(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	
 
 
 }

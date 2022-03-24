@@ -2,6 +2,7 @@ package org.projet.data.entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,8 +26,10 @@ public class ReservationBookEntity {
     @OneToOne
     private BookEntity book;
 
+    @Column(name="borrowing_date")
     private LocalDateTime borrowingDate;
 
+    @Column(name="returning_date")
     private LocalDateTime returningDate;
 
     @ManyToOne
