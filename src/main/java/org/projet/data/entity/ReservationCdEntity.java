@@ -1,7 +1,6 @@
 package org.projet.data.entity;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,24 +13,23 @@ import javax.persistence.Table;
 
 import lombok.Data;
 
+
 @Data
 @Entity
-public class ReservationDVDEntity {
+public class ReservationCdEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
-    private DVDEntity dvd;
+    private CdEntity cd;
 
     @Column(name="borrowing_date")
     private LocalDateTime borrowingDate;
 
-    @Column(name= "returning_date")
+    @Column(name="returning_date")
     private LocalDateTime returningDate;
 
     @ManyToOne
     private UserEntity user;
-
-	
 }

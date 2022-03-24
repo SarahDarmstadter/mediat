@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.projet.data.entity.BookEntity;
 import org.projet.data.entity.BookRefEntity;
-import org.projet.data.entity.CDEntity;
-import org.projet.data.entity.DVDEntity;
+import org.projet.data.entity.CdEntity;
+import org.projet.data.entity.DvdEntity;
 import org.projet.data.entity.ReservationBookEntity;
-import org.projet.data.entity.ReservationCDEntity;
-import org.projet.data.entity.ReservationDVDEntity;
+import org.projet.data.entity.ReservationCdEntity;
+import org.projet.data.entity.ReservationDvdEntity;
 import org.projet.data.entity.UserEntity;
 import org.projet.data.repository.ReservationBookEntityRepository;
 import org.projet.data.repository.ReservationCDEntityRepository;
@@ -43,11 +43,11 @@ public class ReservationService {
 		return reservationBookEntityRepository.findAll();
 	}
 
-	public List<ReservationCDEntity> getAllReservationCD() {
+	public List<ReservationCdEntity> getAllReservationCD() {
 		return reservationCDEntityRepository.findAll();
 	}
 
-	public List<ReservationDVDEntity> getAllReservationDVD() {
+	public List<ReservationDvdEntity> getAllReservationDVD() {
 		return reservationDVDEntityRepository.findAll();
 	}
 
@@ -96,7 +96,7 @@ public class ReservationService {
 	
 
 	//RESERVER UN CD
-	public ReservationCDEntity reserverCD(CDEntity cd, UserEntity user) throws Exception {
+	public ReservationCdEntity reserverCD(CdEntity cd, UserEntity user) throws Exception {
 		// Vérifier que le disque existe et qu'il est dispo
 		if (!cdService.cdIsDispo(cd)) {
 			throw new Exception("Le disque " + cd.getId() + " n'est pas disponible.");
@@ -112,7 +112,7 @@ public class ReservationService {
 		cd = cdService.updateCd(cd);
 
 		// Créer une réservation
-		ReservationCDEntity reservation = new ReservationCDEntity();
+		ReservationCdEntity reservation = new ReservationCdEntity();
 		reservation.setCd(cd);
 		reservation.setBorrowingDate(LocalDateTime.now());
 		reservation.setReturningDate(LocalDateTime.now().plusDays(7));
@@ -121,15 +121,15 @@ public class ReservationService {
 	}
 
 
-	private ReservationCDEntity saveReservationCD(ReservationCDEntity reservation) {
+	private ReservationCdEntity saveReservationCD(ReservationCdEntity reservation) {
 		return reservationCDEntityRepository.save(reservation);
 	}
 	
 	// annuler une reservation de CD
 	
 	public void cancelResaCDById(Long id) {
-		ReservationCDEntity reservation = reservationCDEntityRepository.getById(id);
-		CDEntity cd = reservation.getCd();
+		ReservationCdEntity reservation = reservationCDEntityRepository.getById(id);
+		CdEntity cd = reservation.getCd();
 		cd.setIsDispo(true);
 		cdService.updateCd(cd);
 		reservationCDEntityRepository.delete(reservation);
@@ -138,7 +138,7 @@ public class ReservationService {
 
 
 	//RESERVER UN DVD 
-	public ReservationDVDEntity reserverDVD(DVDEntity dvd, UserEntity user) throws Exception {
+	public ReservationDvdEntity reserverDVD(DvdEntity dvd, UserEntity user) throws Exception {
 		// Vérifier que le disque existe et qu'il est dispo
 		if (!dvdService.dvdIsDispo(dvd)) {
 			throw new Exception("Le dvd " + dvd.getId() + " n'est pas disponible.");
@@ -154,7 +154,7 @@ public class ReservationService {
 		dvd = dvdService.updateDvd(dvd);
 
 		// Créer une réservation
-		ReservationDVDEntity reservation = new ReservationDVDEntity();
+		ReservationDvdEntity reservation = new ReservationDvdEntity();
 		reservation.setDvd(dvd);
 		reservation.setBorrowingDate(LocalDateTime.now());
 		reservation.setReturningDate(LocalDateTime.now().plusDays(7));
@@ -162,14 +162,14 @@ public class ReservationService {
 		return saveReservationDVD(reservation);
 	}
 
-	private ReservationDVDEntity saveReservationDVD(ReservationDVDEntity reservation) {
+	private ReservationDvdEntity saveReservationDVD(ReservationDvdEntity reservation) {
 		return reservationDVDEntityRepository.save(reservation);
 	}
 	
 	// annuler une reservation de DVD 
 	public void cancelResaDVDById(Long id) {
-		ReservationDVDEntity reservation = reservationDVDEntityRepository.getById(id);
-		DVDEntity dvd = reservation.getDvd();
+		ReservationDvdEntity reservation = reservationDVDEntityRepository.getById(id);
+		DvdEntity dvd = reservation.getDvd();
 		dvd.setIsDispo(true);
 		dvdService.updateDvd(dvd);
 		reservationDVDEntityRepository.delete(reservation);

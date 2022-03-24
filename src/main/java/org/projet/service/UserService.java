@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import org.projet.data.DTO.UserDTO;
 import org.projet.data.entity.ReservationBookEntity;
-import org.projet.data.entity.ReservationCDEntity;
-import org.projet.data.entity.ReservationDVDEntity;
+import org.projet.data.entity.ReservationCdEntity;
+import org.projet.data.entity.ReservationDvdEntity;
 import org.projet.data.entity.UserEntity;
 import org.projet.data.entity.UserRole;
 import org.projet.data.entity.UserStatus;
@@ -108,19 +108,19 @@ public class UserService {
 			
 	}
 	
-	public ReservationCDEntity getReservationCDByUser(UserEntity userEntity) {
+	public ReservationCdEntity getReservationCDByUser(UserEntity userEntity) {
 		return reservationCDRepository.findByUser(userEntity);		
 	}
 	
-	public ReservationDVDEntity getReservationDVDByUser(UserEntity userEntity) {
+	public ReservationDvdEntity getReservationDVDByUser(UserEntity userEntity) {
 		return reservationDVDRepository.findByUser(userEntity);
 	}
 	
 	public List<Object> getAllReservationByUser(UserEntity userEntity){
 		List<Object> reservationList = new ArrayList<Object>();
 		ReservationBookEntity reservationBook = reservationBookRepository.findByUser(userEntity);
-		ReservationCDEntity reservationCD = reservationCDRepository.findByUser(userEntity);
-		ReservationDVDEntity reservationDVD = reservationDVDRepository.findByUser(userEntity);
+		ReservationCdEntity reservationCD = reservationCDRepository.findByUser(userEntity);
+		ReservationDvdEntity reservationDVD = reservationDVDRepository.findByUser(userEntity);
 		reservationList.add(reservationBook);
 		reservationList.add(reservationDVD);
 		reservationList.add(reservationCD);

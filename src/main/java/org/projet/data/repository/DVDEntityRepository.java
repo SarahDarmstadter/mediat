@@ -4,19 +4,19 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.projet.data.entity.DVDEntity;
-import org.projet.data.entity.DVDRefEntity;
+import org.projet.data.entity.DvdEntity;
+import org.projet.data.entity.DvdRefEntity;
 import org.projet.data.entity.TypeDVD;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DVDEntityRepository extends JpaRepository<DVDEntity, Long> {
+public interface DVDEntityRepository extends JpaRepository<DvdEntity, Long> {
 
-	public List<DVDEntity> findAllByisDispo(boolean b);
-	public List<DVDEntity> findAllByisDispoAndReference(boolean b, DVDRefEntity reference);
-	public Integer countAllByReference(DVDRefEntity dvdReference);
-	public List<DVDEntity> findAllByisDispoAndReferenceAndTypeDvd(boolean b, @Valid DVDRefEntity reference,TypeDVD typeDvd);
-	public List<DVDEntity> findByTypeDvd(TypeDVD typeDvd);
+	public List<DvdEntity> findAllByisDispo(boolean b);
+	public List<DvdEntity> findAllByisDispoAndReference(boolean b, DvdRefEntity reference);
+	public Integer countAllByReference(DvdRefEntity dvdReference);
+	public List<DvdEntity> findAllByisDispoAndReferenceAndTypeDvd(boolean b, @Valid DvdRefEntity reference,TypeDVD typeDvd);
+	public List<DvdEntity> findByTypeDvd(TypeDVD typeDvd);
 
 }

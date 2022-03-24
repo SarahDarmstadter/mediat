@@ -4,11 +4,11 @@ package org.projet.controller;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.projet.data.DTO.DvDDTO;
-import org.projet.data.entity.CDEntity;
-import org.projet.data.entity.DVDEntity;
-import org.projet.data.entity.DVDRefEntity;
-import org.projet.data.entity.ReservationCDEntity;
-import org.projet.data.entity.ReservationDVDEntity;
+import org.projet.data.entity.CdEntity;
+import org.projet.data.entity.DvdEntity;
+import org.projet.data.entity.DvdRefEntity;
+import org.projet.data.entity.ReservationCdEntity;
+import org.projet.data.entity.ReservationDvdEntity;
 import org.projet.data.entity.UserEntity;
 import org.projet.exceptions.DVDAlreadyExistsException;
 import org.projet.exceptions.DVDNotFoundException;
@@ -43,48 +43,48 @@ public class DVDRestController {
 	ReservationService reservationService;
 
 	@GetMapping("/allfilms")
-	public List <DVDRefEntity> findAllDvd(){
+	public List <DvdRefEntity> findAllDvd(){
 		return dvdService.getAllRef();
 	}
 
 	@GetMapping("/{artist}")
-	public List <DVDRefEntity> findByDirector(@RequestParam String director ){
+	public List <DvdRefEntity> findByDirector(@RequestParam String director ){
 		return dvdService.getDVDRefByDirector(director);
 	}
 
 	@GetMapping("/{id}")
-	public DVDEntity getBookById(@PathVariable Long id ) {
+	public DvdEntity getBookById(@PathVariable Long id ) {
 		return dvdService.getDVDById(id);
 	}
 
 	@GetMapping("/disponibles")
-	public List <DVDEntity> getAllDvDDisponibles(){
+	public List <DvdEntity> getAllDvDDisponibles(){
 		return dvdService.getAlldvdDispo();
 	}
 
 	@GetMapping("/{director}/disponibles")
-	public List <DVDEntity> findDVDByDirectorAndDispo(@PathVariable String director){
+	public List <DvdEntity> findDVDByDirectorAndDispo(@PathVariable String director){
 		return dvdService.getDVDByDirectorAndIsDispo(director, true);				
 	}
 
 	@PostMapping("/addfilms")
-	public ResponseEntity <DVDEntity> addFilm(@RequestBody DvDDTO dvdDTO) throws DVDAlreadyExistsException {
+	public ResponseEntity <DvdEntity> addFilm(@RequestBody DvDDTO dvdDTO) throws DVDAlreadyExistsException {
 
 		if(dvdService.checkIfDVDExists(dvdDTO.getTitle())) {
 			throw new DVDAlreadyExistsException("DVDRef déjà en base");
 		} else {
-			List<DVDEntity> newDVD = dvdService.createDVD(dvdDTO);
+			List<DvdEntity> newDVD = dvdService.createDVD(dvdDTO);
 			System.out.println("les films sont ajoutés en base");
-			return new ResponseEntity<DVDEntity>(HttpStatus.CREATED);
+			return new ResponseEntity<DvdEntity>(HttpStatus.CREATED);
 		}
 	}
 
 	@PostMapping("/{idDvd}/{idUser}/reserver")
-	public ResponseEntity <ReservationDVDEntity> reserverCD(@PathVariable Long idDvd, @PathVariable Long idUser ) throws Exception{
+	public ResponseEntity <ReservationDvdEntity> reserverCD(@PathVariable Long idDvd, @PathVariable Long idUser ) throws Exception{
 		UserEntity user = userService.getById(idUser);
-		DVDEntity dvd = dvdService.getDVDById(idDvd);
-		ReservationDVDEntity resaDvd = reservationService.reserverDVD(dvd, user);
-		return new ResponseEntity<ReservationDVDEntity>(resaDvd, HttpStatus.CREATED);
+		DvdEntity dvd = dvdService.getDVDById(idDvd);
+		ReservationDvdEntity resaDvd = reservationService.reserverDVD(dvd, user);
+		return new ResponseEntity<ReservationDvdEntity>(resaDvd, HttpStatus.CREATED);
 	}
 	
 	

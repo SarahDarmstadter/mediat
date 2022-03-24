@@ -2,15 +2,15 @@ package org.projet.data.repository;
 
 import java.util.List;
 
-import org.projet.data.entity.DVDRefEntity;
+import org.projet.data.entity.DvdRefEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DVDRefEntityRepository extends JpaRepository<DVDRefEntity, Long> {
+public interface DVDRefEntityRepository extends JpaRepository<DvdRefEntity, Long> {
 
-	public List<DVDRefEntity> findByDirectorIgnoreCase(String director);
+	public List<DvdRefEntity> findByDirectorIgnoreCase(String director);
 
-	public DVDRefEntity findByTitle(String title);
+	public DvdRefEntity findByTitle(String title);
 
 }

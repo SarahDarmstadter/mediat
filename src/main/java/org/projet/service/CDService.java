@@ -8,8 +8,8 @@ import org.projet.data.DTO.BookDTO;
 import org.projet.data.DTO.CDDTO;
 import org.projet.data.entity.BookEntity;
 import org.projet.data.entity.BookRefEntity;
-import org.projet.data.entity.CDEntity;
-import org.projet.data.entity.CDRefEntity;
+import org.projet.data.entity.CdEntity;
+import org.projet.data.entity.CdRefEntity;
 import org.projet.data.repository.CDEntityRepository;
 import org.projet.data.repository.CDRefEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,55 +25,55 @@ public class CDService {
 	CDRefEntityRepository cdRefRepository; 
 	
 	// Retrouver tous les disques disponibles 
-	public List<CDEntity> getAllCDDispo(){
+	public List<CdEntity> getAllCDDispo(){
 		return cdEntityRepository.findAllByisDispo(true);
 	}
 	
 	//Retrouver tous les disques disponibles par reference 
-	public List <CDEntity> getAllCDDispoByRef(CDRefEntity reference){
+	public List <CdEntity> getAllCDDispoByRef(CdRefEntity reference){
 		return cdEntityRepository.findAllByisDispoAndReference(true, reference);
 	}
 	
 	//Compter le nombre de livres disponibles d'une même référence 
-	public Integer getCDDispoCountByRef(CDRefEntity cdReference) {
+	public Integer getCDDispoCountByRef(CdRefEntity cdReference) {
 		return cdEntityRepository.countAllByReference(cdReference);
 	}
 	
 	// Retrouver tous les disque d'un artiste
-	public List <CDRefEntity> getCDRefByArtist(String artist) {
+	public List <CdRefEntity> getCDRefByArtist(String artist) {
 		return cdRefRepository.findByArtistIgnoreCase(artist);
 	}
 
 	//Verifier la disponibilité d'un disque
-	public boolean cdIsDispo(CDEntity cdEntity) throws NoSuchElementException{
+	public boolean cdIsDispo(CdEntity cdEntity) throws NoSuchElementException{
 		//verifions qu'il existe en bdd
-		CDEntity cd =cdEntityRepository.findById(cdEntity.getId())
+		CdEntity cd =cdEntityRepository.findById(cdEntity.getId())
 							.orElseThrow(() -> new NoSuchElementException("Le disque " + cdEntity.getId() + " n'existe pas."));
 		return cdEntity.getIsDispo();	
 		
 	}
 
 	//Updater un disque (dispo / plus dispo)
-	public CDEntity updateCd(CDEntity cdEntity) {
+	public CdEntity updateCd(CdEntity cdEntity) {
 		if (!cdEntityRepository.existsById(cdEntity.getId())) {
             throw new NoSuchElementException("Le disque " + cdEntity.getId() + " n'existe pas.");
         }
         return cdEntityRepository.save(cdEntity);
 	}
 
-	public List<CDRefEntity> getAllRef() {
+	public List<CdRefEntity> getAllRef() {
 		return cdRefRepository.findAll();
 	}
 
-	public CDEntity getCDById(Long id) {
+	public CdEntity getCDById(Long id) {
 		return cdEntityRepository.getById(id);
 	}
 
-	public List<CDEntity> getCDByArtistAndIsDispo(String artist, boolean b) {
-		List<CDRefEntity> listRef = cdRefRepository.findByArtistIgnoreCase(artist);
-		List <CDEntity> listCDDispo = new ArrayList<>();
-		for (CDRefEntity cdRefEntity : listRef) {
-			List <CDEntity> cdDispo =  getAllCDDispoByRef(cdRefEntity);
+	public List<CdEntity> getCDByArtistAndIsDispo(String artist, boolean b) {
+		List<CdRefEntity> listRef = cdRefRepository.findByArtistIgnoreCase(artist);
+		List <CdEntity> listCDDispo = new ArrayList<>();
+		for (CdRefEntity cdRefEntity : listRef) {
+			List <CdEntity> cdDispo =  getAllCDDispoByRef(cdRefEntity);
 			listCDDispo.addAll(cdDispo);
 		}
 		return listCDDispo;
@@ -81,8 +81,8 @@ public class CDService {
 	}
 
 	//Enregistrer des disques 
-	public List<CDEntity> createCD(CDDTO cdDTO) {
-		CDRefEntity cdRefEntity = new CDRefEntity();
+	public List<CdEntity> createCD(CDDTO cdDTO) {
+		CdRefEntity cdRefEntity = new CdRefEntity();
 		cdRefEntity.setArtist(cdDTO.getArtist());
 		cdRefEntity.setDuration(cdDTO.getDuration());
 		cdRefEntity.setCopies(cdDTO.getCopies());
@@ -90,11 +90,11 @@ public class CDService {
 		cdRefEntity.setPublicationDate(cdDTO.getPublicationDate());
 		cdRefEntity.setTitle(cdDTO.getTitle());
 		cdRefEntity = cdRefRepository.save(cdRefEntity);
-		List <CDEntity> cdList = new ArrayList<CDEntity>();
+		List <CdEntity> cdList = new ArrayList<CdEntity>();
 
 		for (int i = 0; i < cdDTO.getCopies(); i++) {
 
-			CDEntity cdEntity = new CDEntity();
+			CdEntity cdEntity = new CdEntity();
 			cdEntity.setIsDispo(true);
 			cdEntity.setReference(cdRefEntity);
 			cdEntityRepository.save(cdEntity);	
@@ -114,16 +114,16 @@ public class CDService {
 
 	// supprimer un disque en particulier sans supprimer la réference
 	public void deleteCDById(Long id) {
-		CDEntity cd = cdEntityRepository.getById(id);
+		CdEntity cd = cdEntityRepository.getById(id);
 		cdEntityRepository.delete(cd);
-	CDRefEntity cdRef = cdRefRepository.getById(cd.getId());
+	CdRefEntity cdRef = cdRefRepository.getById(cd.getId());
 		cdRef.setCopies(cdRef.getCopies()-1);	
 		updateCdRef(cdRef);
 	}
 
 	// mise à jour du bookRefEntity 
 	
-	public CDRefEntity updateCdRef(CDRefEntity cdRefEntity) {
+	public CdRefEntity updateCdRef(CdRefEntity cdRefEntity) {
 		if (!cdRefRepository.existsById(cdRefEntity.getId())) {
 			throw new NoSuchElementException("Le disque " + cdRefEntity.getId() + " n'existe pas.");
 		}
@@ -131,10 +131,10 @@ public class CDService {
 	}
 
 	public void deleteCDRefById(long id) {
-		CDRefEntity cdRef = cdRefRepository.getById(id);
+		CdRefEntity cdRef = cdRefRepository.getById(id);
 		
 		for (int i = 0; i < cdRef.getCopies(); i++) {
-			CDEntity cdEntity = cdEntityRepository.getById(cdRef.getId());
+			CdEntity cdEntity = cdEntityRepository.getById(cdRef.getId());
 			cdEntityRepository.delete(cdEntity);
 		}
 		cdRefRepository.delete(cdRef);

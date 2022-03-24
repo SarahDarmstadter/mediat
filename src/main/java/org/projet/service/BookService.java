@@ -52,7 +52,7 @@ public class BookService {
 		//verifions qu'il existe en bdd
 		BookEntity book = bookEntityRepository.findById(bookEntity.getId())
 				.orElseThrow(() -> new NoSuchElementException("Le livre " + bookEntity.getId() + " n'existe pas."));
-		return bookEntity.getIsDispo();	
+		return book.getIsDispo();	
 
 	}
 

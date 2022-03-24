@@ -58,11 +58,11 @@ public class UserEntity {
 		
 		@OneToMany(mappedBy = "user")
 		@JsonIgnore
-		private List <ReservationCDEntity> reservationCDEntity;
+		private List <ReservationCdEntity> reservationCDEntity;
 		
 		@OneToMany(mappedBy = "user")
 		@JsonIgnore
-		private List <ReservationDVDEntity> reservationDVDEntity;
+		private List <ReservationDvdEntity> reservationDVDEntity;
 
 		
 

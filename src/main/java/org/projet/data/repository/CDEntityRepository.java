@@ -2,16 +2,16 @@ package org.projet.data.repository;
 
 import java.util.List;
 
-import org.projet.data.entity.CDEntity;
-import org.projet.data.entity.CDRefEntity;
+import org.projet.data.entity.CdEntity;
+import org.projet.data.entity.CdRefEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CDEntityRepository extends JpaRepository<CDEntity, Long> {
+public interface CDEntityRepository extends JpaRepository<CdEntity, Long> {
 
-	public List<CDEntity> findAllByisDispo(boolean b);
-	public int countAllByReference(CDRefEntity cdReference);
-	public List<CDEntity> findAllByisDispoAndReference(boolean b, CDRefEntity reference);
+	public List<CdEntity> findAllByisDispo(boolean b);
+	public int countAllByReference(CdRefEntity cdReference);
+	public List<CdEntity> findAllByisDispoAndReference(boolean b, CdRefEntity reference);
 
 }

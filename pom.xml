@@ -8,7 +8,7 @@
 		<version>2.6.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>org.formation</groupId>
+	<groupId>org.projet</groupId>
 	<artifactId>Mediatheque_Backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Mediatheque_Backend</name>
