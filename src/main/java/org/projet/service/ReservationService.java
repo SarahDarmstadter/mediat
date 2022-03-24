@@ -14,6 +14,8 @@ import org.projet.data.entity.UserEntity;
 import org.projet.data.repository.ReservationBookEntityRepository;
 import org.projet.data.repository.ReservationCDEntityRepository;
 import org.projet.data.repository.ReservationDVDEntityRepository;
+import org.projet.exceptions.BookNotAvailableException;
+import org.projet.exceptions.UserCantBorrowException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,12 +59,12 @@ public class ReservationService {
 	public ReservationBookEntity reserverBook(BookEntity book, UserEntity user) throws Exception {
 		// Vérifier que le livre existe et qu'il est dispo
 		if (!bookService.bookIsDispo(book)) {
-			throw new Exception("Le livre " + book.getId() + " n'est pas disponible.");
+			throw new BookNotAvailableException("Le livre n'est pas disponible.");
 		}
 
 		// Vérifier qu'il lui reste des réservations disponibles
 		if (getNbReservation(user) >= 3) {
-			throw new Exception("La personne " + user.getId() + " ne peut plus rien réserver.");
+			throw new UserCantBorrowException("La personne " + user.getId() + " ne peut plus rien réserver.");
 		}
 
 		// Créer une réservation

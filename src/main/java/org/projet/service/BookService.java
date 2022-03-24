@@ -50,10 +50,10 @@ public class BookService {
 	}
 
 	//Verifier la disponibilité d'un livre
-	public boolean bookIsDispo(BookEntity bookEntity) throws NoSuchElementException{
+	public boolean bookIsDispo(BookEntity bookEntity) throws BookNotFoundException{
 		//verifions qu'il existe en bdd
 		BookEntity book = bookEntityRepository.findById(bookEntity.getId())
-				.orElseThrow(() -> new NoSuchElementException("Le livre " + bookEntity.getId() + " n'existe pas."));
+				.orElseThrow(() -> new BookNotFoundException("Le livre n'existe pas."));
 		return book.getIsDispo();	
 
 	}

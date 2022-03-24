@@ -19,7 +19,7 @@ insert into dvd_ref_entity (director, copies, duration, publication_date,  title
 insert into dvd_ref_entity (director, copies, duration, publication_date, title) values ('Victor Rodio', 2, 190, '12-24-1992',  'Demain');
 insert into dvd_ref_entity (director, copies, duration, publication_date, title) values ('Virginie Cibi', 2, 190, '12-24-1992',  'Ce printemps à la mer');
 
-insert into book_entity (is_dispo, reference_id) values (false, 1);
+insert into book_entity (is_dispo, reference_id) values (true, 1);
 insert into book_entity (is_dispo, reference_id) values (false, 1);
 insert into book_entity (is_dispo, reference_id) values (false, 1);
 insert into book_entity (is_dispo, reference_id) values (false, 2);
