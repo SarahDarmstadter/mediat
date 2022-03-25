@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,7 @@ public class BookServiceTest {
 
 		try {
 			List <BookEntity> newBooks = bookService.createBook(newbook);
+			
 		} catch (BookAlreadyExistsException e) {
 
 			String actual = e.getMessage();

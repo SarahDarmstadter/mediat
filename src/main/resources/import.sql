@@ -1,7 +1,7 @@
-insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'UN', 'test1@test.com', 'Password123!','user', 'connected');
-insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'DEUX', 'test2@test.com', 'Password123!', 'user', 'connected');
-insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'TROIS', 'test3@test.com', 'Password123!','user', 'connected');
-insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'QUATRE', 'test4@test.com','Password123!', 'user', 'connected');
+insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'UN', 'test1@test.com', 'Password123!','USER', 'CONNECTED');
+insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'DEUX', 'test2@test.com', 'Password123!', 'USER', 'CONNECTED');
+insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'TROIS', 'test3@test.com', 'Password123!','USER', 'CONNECTED');
+insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'QUATRE', 'test4@test.com','Password123!', 'USER', 'CONNECTED');
 
 
 insert into book_ref_entity (author_book, isbn_book, pub_date_book, copies, title_book) values ('Auteur UN', '1234567', '03-24-2022', 3, 'Le Crimier apprend à coder');

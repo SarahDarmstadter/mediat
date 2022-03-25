@@ -58,15 +58,17 @@ public class ReservationService {
 	//RESERVER UN LIVRE 
 	public ReservationBookEntity reserverBook(BookEntity book, UserEntity user) throws Exception {
 		// Vérifier que le livre existe et qu'il est dispo
-		if (!bookService.bookIsDispo(book)) {
+		if (bookService.bookIsDispo(book) == false) {
 			throw new BookNotAvailableException("Le livre n'est pas disponible.");
+			
 		}
 
 		// Vérifier qu'il lui reste des réservations disponibles
 		if (getNbReservation(user) >= 3) {
-			throw new UserCantBorrowException("La personne " + user.getId() + " ne peut plus rien réserver.");
+			throw new UserCantBorrowException("La personne ne peut plus rien réserver.");
 		}
 
+		
 		// Créer une réservation
 		ReservationBookEntity reservation = new ReservationBookEntity();
 		reservation.setBook(book);
