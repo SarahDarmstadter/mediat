@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 
 import org.projet.data.DTO.CDDTO;
 import org.projet.data.entity.BookEntity;
+import org.projet.data.entity.BookRefEntity;
 import org.projet.data.entity.CdEntity;
 import org.projet.data.entity.CdRefEntity;
 import org.projet.data.entity.ReservationBookEntity;
@@ -43,32 +44,65 @@ public class CDRestController {
 	@Autowired
 	ReservationService reservationService;
 
-	@GetMapping("/alldisques")
+	
 	public List <CdRefEntity> findAllCd(){
 		return cdService.getAllRef();
 	}
 
-	@GetMapping("/{artist}")
-	public List <CdRefEntity> findByAuthor(@RequestParam String artist ){
-		return cdService.getCDRefByArtist(artist);
-	}
+//	@GetMapping("/{artist}")
+//	public List <CdRefEntity> findByAuthor(@RequestParam String artist ){
+//		return cdService.getCDRefByArtist(artist);
+//	}
+//
+//	@GetMapping("/{id}")
+//	public CdEntity getDisqueById(@PathVariable Long id ) {
+//			return cdService.getCDById(id);
+//	}
+//	
+//	@GetMapping("/disponibles")
+//	public List <CdEntity> getAllCDDisponibles(){
+//		return cdService.getAllCDDispo();
+//	}
+//	
+//	@GetMapping("/{artist}/disponibles")
+//	public List <CdEntity> findCDByAuthorAndDispo(@PathVariable String artist){
+//		return cdService.getCDByArtistAndIsDispo(artist, true);				
+//	}
+	
+	
+	//Pour les references de disque 
+	
+		@GetMapping("/{artist}/{id}/{disponible}")
+		public List <CdRefEntity> findAllCds(@RequestParam(required = false) String artist, @RequestParam(required=false) Long id, @RequestParam(required = false) Boolean disponible ){
+			if(artist == null && id !=null && disponible == true || disponible ==false) {
+				return (List<CdRefEntity>) cdService.getCdRefbyId(id);
 
-	@GetMapping("/{id}")
-	public CdEntity getBookById(@PathVariable Long id ) {
-			return cdService.getCDById(id);
-	}
+			} else if (id == null && artist!=null && (disponible == true || disponible ==false)) {
+				return cdService.getCDRefByArtist(artist);
+	 
+			} else if (id==null && artist != null && disponible==true) { 
+				return cdService.getRefByArtistAndIsDispo(artist, disponible);				
+			}else {
+				return cdService.getAllRef();
+			}
+			
+		}
+		
+		//Pour les entités de cd 
+		
+		@GetMapping("/entity/{id}/{disponible}")
+		public List <CdEntity> getAllCdEntities(@RequestParam(required=false) Long id, @RequestParam(required = false) Boolean disponible) {
+			
+			if(id==null && disponible ==true || disponible== false) {
+				return cdService.getAllCdEntity();
+			} else {
+				return cdService.getAllCDDispo();
+			}
+		}
+		
+		
 	
-	@GetMapping("/disponibles")
-	public List <CdEntity> getAllCDDisponibles(){
-		return cdService.getAllCDDispo();
-	}
-	
-	@GetMapping("/{artist}/disponibles")
-	public List <CdEntity> findCDByAuthorAndDispo(@PathVariable String artist){
-		return cdService.getCDByArtistAndIsDispo(artist, true);				
-	}
-	
-	@PostMapping("/addDisque")
+	@PostMapping("/add")
 	public ResponseEntity <CdEntity> addDisque(@RequestBody CDDTO cdDTO) throws CDAlreadyExistsException {
 		
 		if(cdService.checkIfCDExists(cdDTO.getTitle())) {

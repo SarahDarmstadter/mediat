@@ -1,6 +1,7 @@
 package org.projet.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,11 +9,14 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.projet.data.entity.BookEntity;
 import org.projet.data.entity.ReservationBookEntity;
 import org.projet.data.entity.UserEntity;
+import org.projet.data.repository.BookEntityRepository;
+import org.projet.data.repository.ReservationBookEntityRepository;
 import org.projet.exceptions.BookAlreadyExistsException;
 import org.projet.exceptions.BookNotAvailableException;
 import org.projet.exceptions.ReservationNotFoundException;
@@ -29,6 +33,12 @@ public class ReservationServiceTest {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	ReservationBookEntityRepository reservationBookEntityRepository;
+	
+	@Autowired 
+	BookEntityRepository bookEntityRepository;
 
 	@Test
 	@Transactional
@@ -109,8 +119,13 @@ public class ReservationServiceTest {
 		
 		reservationService.cancelResaBookById(reservation.getId());
 		
-		assertNull(reservation);
+		//Recharge de la reservation depuis la bdd et du bookEntity
 		
+		Optional <ReservationBookEntity> ret = reservationBookEntityRepository.findById(3l);
+		assertFalse(ret.isPresent());
+		
+		BookEntity retBook = bookEntityRepository.getById(4l);
+			assertTrue(retBook.getIsDispo());
 		
 	}
 	

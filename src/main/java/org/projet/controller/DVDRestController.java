@@ -47,13 +47,13 @@ public class DVDRestController {
 		return dvdService.getAllRef();
 	}
 
-	@GetMapping("/{artist}")
+	@GetMapping("/{director}")
 	public List <DvdRefEntity> findByDirector(@RequestParam String director ){
 		return dvdService.getDVDRefByDirector(director);
 	}
 
 	@GetMapping("/{id}")
-	public DvdEntity getBookById(@PathVariable Long id ) {
+	public DvdEntity getDvdById(@PathVariable Long id ) {
 		return dvdService.getDVDById(id);
 	}
 

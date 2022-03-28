@@ -140,7 +140,38 @@ public class CDService {
 		cdRefRepository.delete(cdRef);
 		
 	}
+
+	public List<CdRefEntity> getCdRefbyId(Long id) {
+		return cdRefRepository.findAllById(id);
+	}
+
+	public List<CdRefEntity> getCdRefByArtist(String artist, boolean b) {
+		return cdRefRepository.findByArtistAndReference(artist, true);
+	}
+
 	
+
+	public List<CdRefEntity> getRefByArtistAndIsDispo(String artist, boolean b) {
+		List <CdRefEntity> listRef = cdRefRepository.findByArtistIgnoreCase(artist);
+		List <CdEntity> listCdDispo = new ArrayList<>();
+
+		//creation d'une liste de ref dont au moins 1 entity est dispo 
+		List <CdRefEntity> listRefDispo = new ArrayList<>();
+
+
+		//check sil y a des livres dispo dans la ref. 
+		for (CdRefEntity cdRefEntity : listRef) {
+			List <CdEntity> cdDispo =  getAllCDDispoByRef(cdRefEntity);
+			if (cdDispo.size() >=1) {
+				listRefDispo.add(cdRefEntity);
+			}
+		} return listRefDispo;
+	}
+
+	public List<CdEntity> getAllCdEntity() {
+		// TODO Auto-generated method stub
+		return cdEntityRepository.findAll();
+	}
 	
 
 

@@ -2,6 +2,7 @@ insert into user_entity (firstname, lastname, email, password, role, user_status
 insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'DEUX', 'test2@test.com', 'Password123!', 'USER', 'CONNECTED');
 insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'TROIS', 'test3@test.com', 'Password123!','USER', 'CONNECTED');
 insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'QUATRE', 'test4@test.com','Password123!', 'USER', 'CONNECTED');
+insert into user_entity (firstname, lastname, email, password, role, user_status) values ('Testeur', 'CINQ', 'test5@test.com','Password123!', 'USER', 'CONNECTED');
 
 
 insert into book_ref_entity (author_book, isbn_book, pub_date_book, copies, title_book) values ('Auteur UN', '1234567', '03-24-2022', 3, 'Le Crimier apprend à coder');
@@ -30,7 +31,7 @@ insert into book_entity (is_dispo, reference_id) values (true, 3);
 insert into book_entity (is_dispo, reference_id) values (true, 3);
 insert into book_entity (is_dispo, reference_id) values (true, 4);
 insert into book_entity (is_dispo, reference_id) values (true, 4);
-insert into book_entity (is_dispo, reference_id) values (true, 4);
+insert into book_entity (is_dispo, reference_id) values (false, 4);
 
 insert into cd_entity (is_dispo, reference_id) values (false, 1);
 insert into cd_entity (is_dispo, reference_id) values (false, 1);
@@ -42,19 +43,21 @@ insert into cd_entity (is_dispo, reference_id) values (true, 4);
 insert into cd_entity (is_dispo, reference_id) values (true, 4);
 
 
-insert into dvd_entity(is_dispo, type_dvd, reference_id) values (false, 'blueray', 1);
-insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'blueray', 1);
-insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'normal', 1);
-insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'normal', 2);
-insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'blueray', 2);
-insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'normal', 3);
-insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'blueray', 3);
-insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'normal', 4);
-insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'blueray', 4);
+insert into dvd_entity(is_dispo, type_dvd, reference_id) values (false, 'BLUERAY', 1);
+insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'BLUERAY', 1);
+insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'NORMAL', 1);
+insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'NORMAL', 2);
+insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'BLUERAY', 2);
+insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'NORMAL', 3);
+insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'BLUERAY', 3);
+insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'NORMAL', 4);
+insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'BLUERAY', 4);
 
 insert into reservation_book_entity(borrowing_date, returning_date, book_id, user_id_user) values ('03-24-2022', '03-31-2022', 1, 1);
 insert into reservation_book_entity(borrowing_date, returning_date, book_id, user_id_user) values ('03-24-2022', '03-31-2022', 2, 1);
 insert into reservation_book_entity(borrowing_date, returning_date, book_id, user_id_user) values ('03-24-2022', '03-31-2022', 4, 2);
+insert into reservation_book_entity(borrowing_date, returning_date, book_id, user_id_user) values ('03-24-2022', '03-31-2022', 12, 1);
+
 
 insert into reservation_cd_entity(borrowing_date, returning_date, cd_id, user_id_user) values ('03-24-2022', '03-31-2022', 1, 2); 
 insert into reservation_cd_entity(borrowing_date, returning_date, cd_id, user_id_user) values ('03-24-2022', '03-31-2022', 2, 3); 

@@ -46,46 +46,55 @@ public class BookRestController {
 	@Autowired
 	ReservationService reservationService;
 
-	@GetMapping("/allbooks")
-	public List <BookRefEntity> findAllBooks(){
-		return bookService.getAllRef();
-	}
+	
+	//Pour les references de livre 
+	
+	@GetMapping("/{author}/{id}/{disponible}")
+	public List <BookRefEntity> findAllBooks(@RequestParam(required = false) String author, @RequestParam(required=false) Long id, @RequestParam(required = false) Boolean disponible ){
+		if(author == null && id !=null && disponible == true || disponible ==false) {
+			return (List<BookRefEntity>) bookService.getBookRefbyId(id);
 
-	@GetMapping("/{author}")
-	public List <BookRefEntity> findByAuthor(@RequestParam String author ){
-		return bookService.getBookRefByAuthor(author);
-	}
-
-	@GetMapping("/{id}")
-	public BookEntity getBookById(@PathVariable Long id ) {
-			return bookService.getBookById(id);
-	}
-	
-	@GetMapping("/disponibles")
-	public List <BookEntity> getAllBookDisponibles(){
-		return bookService.getAllBookDispo();
+		} else if (id == null && author!=null && (disponible == true || disponible ==false)) {
+			return bookService.getBookRefByAuthor(author);
+ 
+		} else if (id==null && author != null && disponible==true) { 
+			return bookService.getRefByAuthorAndIsDispo(author, disponible);				
+		}else {
+			return bookService.getAllRef();
+		}
+		
 	}
 	
-	@GetMapping("/{author}/disponibles")
-	public List <BookEntity> findBookByAuthorAndDispo(@PathVariable String author){
-		return bookService.getBookByAuthorAndIsDispo(author, true);				
+	//Pour les entités de livre 
+	
+	@GetMapping("/entity/{id}")
+	public List <BookEntity> getAllBookEntities(@RequestParam(required=false) Long id, @RequestParam(required = false) Boolean disponible) {
+		
+		if(id==null && disponible ==true || disponible== false) {
+			return bookService.getAllBookEntity();
+		} else {
+			return bookService.getAllBookDispo();
+		}
 	}
 	
-	@GetMapping("/{id}/ref")
-	public List <BookEntity> findBooksByRef(@PathVariable Long id){
-		Optional<BookRefEntity> bookRef = bookService.getRefById(id);
-		 return bookService.getAllBookByRef(bookRef);
-	}
 	
-	@PostMapping("/{idBook}/{idUser}/reserver")
-	public ResponseEntity <ReservationBookEntity> reserverBook(@PathVariable Long idBook, @PathVariable Long idUser ) throws Exception{
+//	@GetMapping("/{author}?/")
+//	public List <BookRefEntity> findByAuthor(@RequestParam String author ){
+//		return bookService.getBookRefByAuthor(author);
+//	}
+//
+////	@GetMapping("/{id}?")
+////	public BookRefEntity getBookById(@PathVariable Long id ) {
+////			return bookService.getBookRefbyId(id);
+////	}
 	
-		UserEntity user = userService.getById(idUser);
-		BookEntity book = bookService.getBookById(idBook);
-		ReservationBookEntity resaBook = reservationService.reserverBook(book, user);
-		return new ResponseEntity<ReservationBookEntity>(resaBook, HttpStatus.CREATED);
-	}
 	
+//	
+//	@GetMapping("/{author}/disponibles")
+//	public List <BookEntity> findBookByAuthorAndDispo(@PathVariable String author){
+//		return bookService.getBookByAuthorAndIsDispo(author, true);				
+//	}
+		
 	@PostMapping("/addBooks")
 	public ResponseEntity <BookEntity> addBook(@RequestBody BookDTO bookDTO) throws BookAlreadyExistsException {
 		

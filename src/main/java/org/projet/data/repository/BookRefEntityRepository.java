@@ -12,6 +12,10 @@ public interface BookRefEntityRepository extends JpaRepository<BookRefEntity, Lo
 	public List<BookRefEntity> findByAuthorIgnoreCase(String author);
 
 	public BookRefEntity findByTitle(String title);
+	public List <BookRefEntity> findAllById(Long id);
+
+	public List<BookRefEntity> findAllByTitle(String title);
+
 	
 	
 

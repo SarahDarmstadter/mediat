@@ -16,5 +16,6 @@ public interface BookEntityRepository extends JpaRepository<BookEntity, Long> {
 	public List<BookEntity> findAllByisDispoAndReference(boolean isDispo, BookRefEntity reference);
 	public Integer countAllByReference(BookRefEntity reference);
 	public List<BookEntity> findAllByReference(Optional<BookRefEntity> bookRef);
+	public Optional <BookEntity> findById(Long id);
 	
 }

@@ -30,6 +30,11 @@ public class BookService {
 		return bookEntityRepository.findAllByisDispo(true);
 	}
 
+	public List <BookEntity> getAllBookEntity(){
+		return bookEntityRepository.findAll();
+	}
+
+
 	//Retrouver tous les livres disponibles par reference 
 	public List <BookEntity> getAllBookDispoByRef(BookRefEntity reference){
 		return bookEntityRepository.findAllByisDispoAndReference(true, reference);
@@ -74,6 +79,10 @@ public class BookService {
 		return bookEntityRepository.getById(id);
 	}
 
+	public List <BookRefEntity> getBookRefbyId(Long id) {
+		return bookRefRepository.findAllById(id);
+	}
+
 	public List<BookEntity> getBookByAuthorAndIsDispo(String author, boolean b) {
 		List <BookRefEntity> listRef = bookRefRepository.findByAuthorIgnoreCase(author);
 		List <BookEntity> listBookDispo = new ArrayList<>();
@@ -85,6 +94,24 @@ public class BookService {
 
 	}
 
+
+	public List<BookRefEntity> getRefByAuthorAndIsDispo(String author, boolean b) {
+		List <BookRefEntity> listRef = bookRefRepository.findByAuthorIgnoreCase(author);
+		List <BookEntity> listBookDispo = new ArrayList<>();
+
+		//creation d'une liste de ref dont au moins 1 entity est dispo 
+		List <BookRefEntity> listRefDispo = new ArrayList<>();
+
+
+		//check sil y a des livres dispo dans la ref. 
+		for (BookRefEntity bookRefEntity : listRef) {
+			List <BookEntity> bookDispo =  getAllBookDispoByRef(bookRefEntity);
+			if (bookDispo.size() >=1) {
+				listRefDispo.add(bookRefEntity);
+			}
+		} return listRefDispo;
+	}
+	
 	//Enregistrer des livres 
 	public List<BookEntity> createBook(BookDTO bookDTO) throws BookAlreadyExistsException {
 
@@ -153,6 +180,10 @@ public class BookService {
 
 	public Optional<BookRefEntity> getRefById(Long id) {
 		return bookRefRepository.findById(id);
+	}
+
+	public List<BookRefEntity> getBookByTitle(String title) {
+		return bookRefRepository.findAllByTitle(title);
 	}
 
 

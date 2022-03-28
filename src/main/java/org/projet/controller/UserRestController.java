@@ -4,10 +4,14 @@ package org.projet.controller;
 
 import java.util.List;
 import org.projet.data.DTO.UserDTO;
+import org.projet.data.entity.BookEntity;
+import org.projet.data.entity.ReservationBookEntity;
 import org.projet.data.entity.UserEntity;
 import org.projet.data.entity.UserStatus;
 import org.projet.exceptions.UserAlreadyExistsException;
 import org.projet.exceptions.UserNotFoundException;
+import org.projet.service.BookService;
+import org.projet.service.ReservationService;
 import org.projet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +32,12 @@ public class UserRestController {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired 
+	BookService bookService;
+	
+	@Autowired
+	ReservationService reservationService;
 
 	@GetMapping
 	public List<UserEntity> getAllUser(){
@@ -61,7 +71,14 @@ public class UserRestController {
 		return userService.getAllReservationByUser(user);
 	}
 	
+	@PostMapping("/{idUser}/reserver/livre/{idBook}")
+	public ResponseEntity <ReservationBookEntity> reserverBook(@PathVariable Long idBook, @PathVariable Long idUser ) throws Exception{
 	
+		UserEntity user = userService.getById(idUser);
+		BookEntity book = bookService.getBookById(idBook);
+		ReservationBookEntity resaBook = reservationService.reserverBook(book, user);
+		return new ResponseEntity<ReservationBookEntity>(resaBook, HttpStatus.CREATED);
+	}
 	
 	
 //	@GetMapping("/reservationByUser")
