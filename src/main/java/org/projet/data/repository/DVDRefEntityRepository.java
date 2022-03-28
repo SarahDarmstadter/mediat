@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
 public interface DVDRefEntityRepository extends JpaRepository<DvdRefEntity, Long> {
 
 	public List<DvdRefEntity> findByDirectorIgnoreCase(String director);
-
 	public DvdRefEntity findByTitle(String title);
+	public List<DvdRefEntity> findAllById(Long id);
+	public List<DvdRefEntity> findAllByTitle(String title);
 
 }

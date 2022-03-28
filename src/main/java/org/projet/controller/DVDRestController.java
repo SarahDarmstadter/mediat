@@ -42,30 +42,6 @@ public class DVDRestController {
 	@Autowired
 	ReservationService reservationService;
 
-	@GetMapping("/allfilms")
-	public List <DvdRefEntity> findAllDvd(){
-		return dvdService.getAllRef();
-	}
-
-	@GetMapping("/{director}")
-	public List <DvdRefEntity> findByDirector(@RequestParam String director ){
-		return dvdService.getDVDRefByDirector(director);
-	}
-
-	@GetMapping("/{id}")
-	public DvdEntity getDvdById(@PathVariable Long id ) {
-		return dvdService.getDVDById(id);
-	}
-
-	@GetMapping("/disponibles")
-	public List <DvdEntity> getAllDvDDisponibles(){
-		return dvdService.getAlldvdDispo();
-	}
-
-	@GetMapping("/{director}/disponibles")
-	public List <DvdEntity> findDVDByDirectorAndDispo(@PathVariable String director){
-		return dvdService.getDVDByDirectorAndIsDispo(director, true);				
-	}
 
 	@PostMapping("/addfilms")
 	public ResponseEntity <DvdEntity> addFilm(@RequestBody DvDDTO dvdDTO) throws DVDAlreadyExistsException {
@@ -78,32 +54,20 @@ public class DVDRestController {
 			return new ResponseEntity<DvdEntity>(HttpStatus.CREATED);
 		}
 	}
-
-	@PostMapping("/{idDvd}/{idUser}/reserver")
-	public ResponseEntity <ReservationDvdEntity> reserverCD(@PathVariable Long idDvd, @PathVariable Long idUser ) throws Exception{
-		UserEntity user = userService.getById(idUser);
-		DvdEntity dvd = dvdService.getDVDById(idDvd);
-		ReservationDvdEntity resaDvd = reservationService.reserverDVD(dvd, user);
-		return new ResponseEntity<ReservationDvdEntity>(resaDvd, HttpStatus.CREATED);
-	}
 	
 	
-	@DeleteMapping("/{id}/delete")
-	public ResponseEntity <Void> deleteDVD(@PathVariable long id) throws DVDNotFoundException{
+	@DeleteMapping("/delete")
+	public ResponseEntity <Void> deleteDVD(@RequestParam Long id) throws DVDNotFoundException{
 		dvdService.deleteDVDById(id);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 	}
 
 
-	@DeleteMapping("{id}/deleteDvdRef")
-	public ResponseEntity <Void> deleteCDRef(@PathVariable long id) throws NoSuchElementException{
+	@DeleteMapping("deleteDvdRef")
+	public ResponseEntity <Void> deleteCDRef(@RequestParam Long id) throws NoSuchElementException{
 		dvdService.deleteDVDRefById(id);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 	}
 	
-	@DeleteMapping("/{idReservation}/cancelReservation")
-	public ResponseEntity <Void> deleteResaDVD(@PathVariable Long idReservation) throws ReservationNotFoundException{
-		reservationService.cancelResaBookById(idReservation);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-	}
+	
 }

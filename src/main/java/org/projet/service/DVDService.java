@@ -30,54 +30,40 @@ public class DVDService {
 	@Autowired
 	DVDRefEntityRepository dvdRefRepository; 
 	
-	// Retrouver tous les dvd disponibles 
 	public List<DvdEntity> getAlldvdDispo(){
 		return dvdEntityRepository.findAllByisDispo(true);
 	}
 	
-	//Retrouver tous les dvd disponibles par reference 
 	public List <DvdEntity> getAllDVDDispoByRef(DvdRefEntity reference){
 		return dvdEntityRepository.findAllByisDispoAndReference(true, reference);
 	}
 	
-	//Compter le nombre de dvd d'une même référence 
 	public Integer getDVDDispoCountByRef(DvdRefEntity dvdReference) {
 		return dvdEntityRepository.countAllByReference(dvdReference);
 	}
-	
-	//Retrouver les dvd par type 
-	public List <DvdEntity> getAllDVDbyType(TypeDVD typeDvd){
+		public List <DvdEntity> getAllDVDbyType(TypeDVD typeDvd){
 		return dvdEntityRepository.findByTypeDvd(typeDvd);	
 	}
-	
-	//retrouver les DVD disponibles par reference et type
-	public List <DvdEntity> getDvdDispoByRefAndType(@Valid DvdRefEntity reference, TypeDVD typeDvd){
+		public List <DvdEntity> getDvdDispoByRefAndType(@Valid DvdRefEntity reference, TypeDVD typeDvd){
 		return dvdEntityRepository.findAllByisDispoAndReferenceAndTypeDvd(true, reference, typeDvd );
 	}
 	
-	// Retrouver tous les dvd d'un réalisateur
 	public List <DvdRefEntity> getDVDRefByDirector(String director) {
 		return dvdRefRepository.findByDirectorIgnoreCase(director);
 	}
-
-	//Verifier la disponibilité d'un dvd
 	public boolean dvdIsDispo(DvdEntity dvdEntity) throws NoSuchElementException{
-		//verifions qu'il existe en bdd
 		DvdEntity dvd = dvdEntityRepository.findById(dvdEntity.getId())
 							.orElseThrow(() -> new NoSuchElementException("Le DVD " + dvdEntity.getId() + " n'existe pas."));
 		return dvd.getIsDispo();
 		
 	}
 	
-	//Updater un dvd (dispo / plus dispo)
 	public DvdEntity updateDvd(DvdEntity dvdEntity) {
 		if (!dvdEntityRepository.existsById(dvdEntity.getId())) {
             throw new NoSuchElementException("Le DVD " + dvdEntity.getId() + " n'existe pas.");
         }
         return dvdEntityRepository.save(dvdEntity);
 	}
-
-	
 
 	public List<DvdRefEntity> getAllRef() {
 		return dvdRefRepository.findAll();
@@ -98,7 +84,6 @@ public class DVDService {
 
 	}
 
-	//Enregistrer des dvd 
 	public List<DvdEntity> createDVD(DvDDTO dvdDTO) {
 		DvdRefEntity dvdRefEntity = new DvdRefEntity();
 		dvdRefEntity.setDirector(dvdDTO.getDirector());
@@ -160,7 +145,35 @@ public class DVDService {
 	}
 
 
+
+	public List<DvdRefEntity> getDvdRefbyId(Long id) {
+		return dvdRefRepository.findAllById(id);
+	}	
+
+	public List<DvdRefEntity> getRefByArtistAndIsDispo(String director, boolean b) {
+		List <DvdRefEntity> listRef = dvdRefRepository.findByDirectorIgnoreCase(director);
+		List <CdEntity> listDvdDispo = new ArrayList<>();
+
+		List <DvdRefEntity> listRefDispo = new ArrayList<>();
+		for (DvdRefEntity dvdRefEntity : listRef) {
+			List <DvdEntity> dvdDispo =  getAllDVDDispoByRef(dvdRefEntity);
+			if (dvdDispo.size() >=1) {
+				listRefDispo.add(dvdRefEntity);
+			}
+		} return listRefDispo;
+	}
+
+	public List<DvdEntity> getAllDvdEntity() {
+		// TODO Auto-generated method stub
+		return dvdEntityRepository.findAll();
+	}
+
+	public List<DvdRefEntity> getDvdByTitle(String title) {
+		return dvdRefRepository.findAllByTitle(title);
+	}
 	
+
+
 	
 	
 	

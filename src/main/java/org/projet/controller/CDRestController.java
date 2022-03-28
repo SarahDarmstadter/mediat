@@ -37,74 +37,46 @@ public class CDRestController {
 
 	@Autowired
 	CDService cdService;
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	ReservationService reservationService;
 
-	
-	public List <CdRefEntity> findAllCd(){
-		return cdService.getAllRef();
+
+	@GetMapping()
+	public List <CdRefEntity> findAllCds(@RequestParam(required = false) String artist,@RequestParam(required = false) String title, @RequestParam(required=false) Long id, @RequestParam(required = false) boolean disponible ){
+		if(artist == null && id !=null && disponible == true || disponible ==false) {
+			return (List<CdRefEntity>) cdService.getCdRefbyId(id);
+
+		} else if (id == null && artist!=null && (disponible == true || disponible ==false)) {
+			return cdService.getCDRefByArtist(artist);
+
+		} else if (id==null && artist != null && disponible==true) { 
+			return cdService.getRefByArtistAndIsDispo(artist, disponible);				
+		} else if(id == null && artist!=null && (disponible == true || disponible ==false) && title !=null){
+			return cdService.getCdByTitle(title);
+		}	else {
+			return cdService.getAllRef();
+		}
+
 	}
 
-//	@GetMapping("/{artist}")
-//	public List <CdRefEntity> findByAuthor(@RequestParam String artist ){
-//		return cdService.getCDRefByArtist(artist);
-//	}
-//
-//	@GetMapping("/{id}")
-//	public CdEntity getDisqueById(@PathVariable Long id ) {
-//			return cdService.getCDById(id);
-//	}
-//	
-//	@GetMapping("/disponibles")
-//	public List <CdEntity> getAllCDDisponibles(){
-//		return cdService.getAllCDDispo();
-//	}
-//	
-//	@GetMapping("/{artist}/disponibles")
-//	public List <CdEntity> findCDByAuthorAndDispo(@PathVariable String artist){
-//		return cdService.getCDByArtistAndIsDispo(artist, true);				
-//	}
-	
-	
-	//Pour les references de disque 
-	
-		@GetMapping("/{artist}/{id}/{disponible}")
-		public List <CdRefEntity> findAllCds(@RequestParam(required = false) String artist, @RequestParam(required=false) Long id, @RequestParam(required = false) Boolean disponible ){
-			if(artist == null && id !=null && disponible == true || disponible ==false) {
-				return (List<CdRefEntity>) cdService.getCdRefbyId(id);
 
-			} else if (id == null && artist!=null && (disponible == true || disponible ==false)) {
-				return cdService.getCDRefByArtist(artist);
-	 
-			} else if (id==null && artist != null && disponible==true) { 
-				return cdService.getRefByArtistAndIsDispo(artist, disponible);				
-			}else {
-				return cdService.getAllRef();
-			}
-			
+	@GetMapping("/entity")
+	public List <CdEntity> getAllCdEntities(@RequestParam(required = false) boolean disponible) {
+
+		if(!disponible) {
+			return cdService.getAllCdEntity();
+		} else {
+			return cdService.getAllCDDispo();
 		}
-		
-		//Pour les entités de cd 
-		
-		@GetMapping("/entity/{id}/{disponible}")
-		public List <CdEntity> getAllCdEntities(@RequestParam(required=false) Long id, @RequestParam(required = false) Boolean disponible) {
-			
-			if(id==null && disponible ==true || disponible== false) {
-				return cdService.getAllCdEntity();
-			} else {
-				return cdService.getAllCDDispo();
-			}
-		}
-		
-		
-	
+	}
+
 	@PostMapping("/add")
 	public ResponseEntity <CdEntity> addDisque(@RequestBody CDDTO cdDTO) throws CDAlreadyExistsException {
-		
+
 		if(cdService.checkIfCDExists(cdDTO.getTitle())) {
 			throw new CDAlreadyExistsException("CDRef déjà en base");
 		} else {
@@ -113,30 +85,19 @@ public class CDRestController {
 			return new ResponseEntity<CdEntity>(HttpStatus.CREATED);
 		}
 	}
-	
-	@DeleteMapping("/{id}/delete")
-	public ResponseEntity <Void> deleteCD(@PathVariable long id) throws CDNotFoundException{
-	cdService.deleteCDById(id);
+
+	@DeleteMapping("/deleteEntity")
+	public ResponseEntity <Void> deleteCD(@RequestParam Long id) throws CDNotFoundException{
+		cdService.deleteCDById(id);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 	}
-	
-	@DeleteMapping("{id}/deleteRef")
-	public ResponseEntity <Void> deleteCDRef(@PathVariable long id) throws NoSuchElementException{
+
+	@DeleteMapping("/deleteRef")
+	public ResponseEntity <Void> deleteCDRef(@RequestParam Long id) throws NoSuchElementException{
 		cdService.deleteCDRefById(id);
-			return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-	}
-	
-	@PostMapping("/{idDvd}/{idUser}/reserver")
-	public ResponseEntity <ReservationCdEntity> reserverCD(@PathVariable Long idCD, @PathVariable Long idUser ) throws Exception{
-		UserEntity user = userService.getById(idUser);
-		CdEntity cd = cdService.getCDById(idCD);
-		ReservationCdEntity resaCD = reservationService.reserverCD(cd, user);
-		return new ResponseEntity<ReservationCdEntity>(resaCD, HttpStatus.CREATED);
-	}
-	
-	@DeleteMapping("/{idReservation}/cancelReservation")
-	public ResponseEntity <Void> deleteResaCD(@PathVariable Long idReservation) throws ReservationNotFoundException{
-		reservationService.cancelResaCDById(idReservation);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 	}
+
+
+
 }

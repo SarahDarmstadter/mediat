@@ -1,5 +1,6 @@
 package org.projet.data.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.projet.data.entity.ReservationBookEntity;
@@ -11,6 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface ReservationBookEntityRepository extends JpaRepository<ReservationBookEntity, Long> {
 
 	public Integer countAllByUser(UserEntity user);
-	public ReservationBookEntity findByUser(UserEntity user);
+	public List<ReservationBookEntity> findByUser(UserEntity user);
 
 }

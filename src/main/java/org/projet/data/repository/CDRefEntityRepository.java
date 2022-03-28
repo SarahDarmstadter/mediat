@@ -15,8 +15,6 @@ public interface CDRefEntityRepository extends JpaRepository<CdRefEntity, Long> 
 
 	public List<CdRefEntity> findAllById(Long id);
 
-	public List<CdRefEntity> findByArtistAndReference(String artist, boolean b);
-
 	public List<CdRefEntity> findAllByTitle(String title);
 
 

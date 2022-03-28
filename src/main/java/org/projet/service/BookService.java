@@ -25,7 +25,6 @@ public class BookService {
 	@Autowired
 	BookRefEntityRepository bookRefRepository; 
 
-	// Retrouver tous les livres disponibles 
 	public List<BookEntity> getAllBookDispo(){
 		return bookEntityRepository.findAllByisDispo(true);
 	}
@@ -35,7 +34,6 @@ public class BookService {
 	}
 
 
-	//Retrouver tous les livres disponibles par reference 
 	public List <BookEntity> getAllBookDispoByRef(BookRefEntity reference){
 		return bookEntityRepository.findAllByisDispoAndReference(true, reference);
 	}
@@ -44,26 +42,20 @@ public class BookService {
 		return bookEntityRepository.findAllByReference(bookRef);
 	}
 
-	//Compter le nombre de livres disponibles d'une même référence 
 	public Integer getLivreDispoCountByRef(BookRefEntity bookReference) {
 		return bookEntityRepository.countAllByReference(bookReference);
 	}
 
-	// Retrouver tous les livres d'un auteur
 	public List <BookRefEntity> getBookRefByAuthor(String author) {
 		return bookRefRepository.findByAuthorIgnoreCase(author);
 	}
 
-	//Verifier la disponibilité d'un livre
 	public boolean bookIsDispo(BookEntity bookEntity) throws BookNotFoundException{
-		//verifions qu'il existe en bdd
 		BookEntity book = bookEntityRepository.findById(bookEntity.getId())
 				.orElseThrow(() -> new BookNotFoundException("Le livre n'existe pas."));
 		return book.getIsDispo();	
-
 	}
 
-	//Updater un livre (dispo / plus dispo)
 	public BookEntity updateBook(BookEntity bookEntity) {
 		if (!bookEntityRepository.existsById(bookEntity.getId())) {
 			throw new NoSuchElementException("Le livre " + bookEntity.getId() + " n'existe pas.");
@@ -99,11 +91,8 @@ public class BookService {
 		List <BookRefEntity> listRef = bookRefRepository.findByAuthorIgnoreCase(author);
 		List <BookEntity> listBookDispo = new ArrayList<>();
 
-		//creation d'une liste de ref dont au moins 1 entity est dispo 
 		List <BookRefEntity> listRefDispo = new ArrayList<>();
 
-
-		//check sil y a des livres dispo dans la ref. 
 		for (BookRefEntity bookRefEntity : listRef) {
 			List <BookEntity> bookDispo =  getAllBookDispoByRef(bookRefEntity);
 			if (bookDispo.size() >=1) {
@@ -112,7 +101,6 @@ public class BookService {
 		} return listRefDispo;
 	}
 	
-	//Enregistrer des livres 
 	public List<BookEntity> createBook(BookDTO bookDTO) throws BookAlreadyExistsException {
 
 		if(bookRefRepository.findByTitle(bookDTO.getTitle()) !=null) {
@@ -148,7 +136,6 @@ public class BookService {
 		return true;
 	}
 
-	// supprimer un livre en particulier sans supprimer la réference
 	public void deleteBookById(Long id) throws BookNotFoundException{
 		BookEntity book = bookEntityRepository.getById(id);
 		if(book == null) {
@@ -161,7 +148,6 @@ public class BookService {
 		}
 	}
 
-	// mise à jour du bookRefEntity 
 
 	public BookRefEntity updateBookRef(BookRefEntity bookRefUpdate) throws BookNotFoundException {
 		if (bookRefRepository.getById(bookRefUpdate.getId()) == null) {
@@ -185,10 +171,6 @@ public class BookService {
 	public List<BookRefEntity> getBookByTitle(String title) {
 		return bookRefRepository.findAllByTitle(title);
 	}
-
-
-
-
 
 
 }

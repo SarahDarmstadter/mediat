@@ -103,24 +103,11 @@ public class UserService {
 			userRepository.delete(user);
 	}
 	
-	public ReservationBookEntity getReservationBookByUser(UserEntity userEntity) {
-		return reservationBookRepository.findByUser(userEntity);
-			
-	}
-	
-	public ReservationCdEntity getReservationCDByUser(UserEntity userEntity) {
-		return reservationCDRepository.findByUser(userEntity);		
-	}
-	
-	public ReservationDvdEntity getReservationDVDByUser(UserEntity userEntity) {
-		return reservationDVDRepository.findByUser(userEntity);
-	}
-	
 	public List<Object> getAllReservationByUser(UserEntity userEntity){
 		List<Object> reservationList = new ArrayList<Object>();
-		ReservationBookEntity reservationBook = reservationBookRepository.findByUser(userEntity);
-		ReservationCdEntity reservationCD = reservationCDRepository.findByUser(userEntity);
-		ReservationDvdEntity reservationDVD = reservationDVDRepository.findByUser(userEntity);
+		List <ReservationBookEntity> reservationBook = reservationBookRepository.findByUser(userEntity);
+		List <ReservationCdEntity> reservationCD = reservationCDRepository.findByUser(userEntity);
+		List <ReservationDvdEntity> reservationDVD = reservationDVDRepository.findByUser(userEntity);
 		reservationList.add(reservationBook);
 		reservationList.add(reservationDVD);
 		reservationList.add(reservationCD);
@@ -128,9 +115,6 @@ public class UserService {
 		return reservationList;
 
 	}
-	
-	
-	
 	
 }
 

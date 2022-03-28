@@ -64,7 +64,7 @@ public class UserEntity {
 		@JsonIgnore
 		private List <ReservationDvdEntity> reservationDVDEntity;
 
-		
+
 
 		
 		

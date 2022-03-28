@@ -5,12 +5,19 @@ package org.projet.controller;
 import java.util.List;
 import org.projet.data.DTO.UserDTO;
 import org.projet.data.entity.BookEntity;
+import org.projet.data.entity.CdEntity;
+import org.projet.data.entity.DvdEntity;
 import org.projet.data.entity.ReservationBookEntity;
+import org.projet.data.entity.ReservationCdEntity;
+import org.projet.data.entity.ReservationDvdEntity;
 import org.projet.data.entity.UserEntity;
 import org.projet.data.entity.UserStatus;
+import org.projet.exceptions.ReservationNotFoundException;
 import org.projet.exceptions.UserAlreadyExistsException;
 import org.projet.exceptions.UserNotFoundException;
 import org.projet.service.BookService;
+import org.projet.service.CDService;
+import org.projet.service.DVDService;
 import org.projet.service.ReservationService;
 import org.projet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +44,22 @@ public class UserRestController {
 	BookService bookService;
 	
 	@Autowired
+	CDService cdService;
+	
+	@Autowired 
+	DVDService dvdService;
+	
+	@Autowired
 	ReservationService reservationService;
 
-	@GetMapping
+	@GetMapping()
 	public List<UserEntity> getAllUser(){
 		return  userService.findAll();
 
 	}
 
-	@GetMapping("/{id}/profile")
-	public ResponseEntity<UserEntity> getUserById(@PathVariable Long id) throws UserNotFoundException {
+	@GetMapping("/profile")
+	public ResponseEntity<UserEntity> getUserById(@RequestParam Long id) throws UserNotFoundException {
 		UserEntity user = userService.findbyId(id)
 		.orElseThrow(()-> new UserNotFoundException("id non reconnu"));
 		
@@ -63,7 +76,7 @@ public class UserRestController {
 		}
 	}
 
-	@GetMapping("/{id}/reservations")
+	@GetMapping("reservations")
 	public List<Object> getAllReseravtions(@PathVariable Long id) throws UserNotFoundException{
 		UserEntity user = userService.findbyId(id)
 				.orElseThrow(()-> new UserNotFoundException("id non reconnu"));
@@ -71,8 +84,8 @@ public class UserRestController {
 		return userService.getAllReservationByUser(user);
 	}
 	
-	@PostMapping("/{idUser}/reserver/livre/{idBook}")
-	public ResponseEntity <ReservationBookEntity> reserverBook(@PathVariable Long idBook, @PathVariable Long idUser ) throws Exception{
+	@PostMapping("/reserver/livre")
+	public ResponseEntity <ReservationBookEntity> reserverBook(@RequestParam Long idBook, @RequestParam Long idUser ) throws Exception{
 	
 		UserEntity user = userService.getById(idUser);
 		BookEntity book = bookService.getBookById(idBook);
@@ -80,20 +93,42 @@ public class UserRestController {
 		return new ResponseEntity<ReservationBookEntity>(resaBook, HttpStatus.CREATED);
 	}
 	
+	@PostMapping("reserver/disque")
+	public ResponseEntity <ReservationCdEntity> reserverCD(@RequestParam Long idCD, @RequestParam Long idUser ) throws Exception{
+		UserEntity user = userService.getById(idUser);
+		CdEntity cd = cdService.getCDById(idCD);
+		ReservationCdEntity resaCD = reservationService.reserverCD(cd, user);
+		return new ResponseEntity<ReservationCdEntity>(resaCD, HttpStatus.CREATED);
+	}
 	
-//	@GetMapping("/reservationByUser")
-//	public List <Object> getAllResaByUser(@RequestParam String email) throws UserNotFoundException{
-//		if(userService.findbyEmail(email) == null){
-//			throw new UserNotFoundException("bookRef déjà en base");
-//		} else {
-//			UserEntity user = userService.findbyEmail(email);
-//			return userService.getAllReservationByUser(user);
-//		}
-//	}
+	@PostMapping("reserver/dvd")
+	public ResponseEntity <ReservationDvdEntity> reserverDvd(@RequestParam Long idDvd, @RequestParam Long idUser ) throws Exception{
+		UserEntity user = userService.getById(idUser);
+		DvdEntity dvd = dvdService.getDVDById(idDvd);
+		ReservationDvdEntity resaDvd = reservationService.reserverDVD(dvd, user);
+		return new ResponseEntity<ReservationDvdEntity>(resaDvd, HttpStatus.CREATED);
+	}
 	
+
+	@DeleteMapping("/cancelReservation/book")
+	public ResponseEntity <Void> deleteResaBook(@RequestParam Long idReservation) throws ReservationNotFoundException{
+		reservationService.cancelResaBookById(idReservation);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+	}
 	
+	@DeleteMapping("/cancelReservation/disque")
+	public ResponseEntity <Void> deleteResaCD(@RequestParam Long idReservation) throws ReservationNotFoundException{
+		reservationService.cancelResaCDById(idReservation);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+	}
 	
-	@PostMapping("/auth/signup")
+	@DeleteMapping("/cancelReservation/dvd")
+	public ResponseEntity <Void> deleteResaDVD(@RequestParam Long idReservation) throws ReservationNotFoundException{
+		reservationService.cancelResaBookById(idReservation);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+	}
+	
+	@PostMapping("/signup")
 	public ResponseEntity <UserEntity> createUser(@RequestBody UserDTO userDTO) throws UserAlreadyExistsException {
 		//Check if user exists already
 		if(userService.checkIfUserExists(userDTO.getEmail())) {
@@ -105,7 +140,7 @@ public class UserRestController {
 	}
 
 	
-	@PostMapping("/auth/login")
+	@PostMapping("/login")
 	public ResponseEntity <UserEntity> login(@RequestBody UserDTO userDTO) throws UserNotFoundException {
 		if(!userService.checkIfUserExists(userDTO.getEmail())){
 			throw new UserNotFoundException("Email non reconnu");
@@ -117,20 +152,21 @@ public class UserRestController {
 		}
 	}
 
-	//Modification email / mot de passe // role et statut ?
 
-	@PatchMapping("/{idUser}/modify")
-	public ResponseEntity <UserEntity> modifyInfos(@PathVariable long id, @RequestBody UserDTO userDTO) throws UserNotFoundException{
+	@PatchMapping("/modify")
+	public ResponseEntity <UserEntity> modifyInfos(@RequestParam Long id, @RequestBody UserDTO userDTO) throws UserNotFoundException{
 		UserEntity user = userService.findbyId(id).orElseThrow(()-> new UserNotFoundException("Utilisateur non reconnu via son id :" + id ));
 		userService.updateUser(user);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 	}
 
-	@DeleteMapping("/auth/{id}/delete")
-	public ResponseEntity <Void> deleteAccount(@PathVariable long id) throws UserNotFoundException{
+	@DeleteMapping("/delete")
+	public ResponseEntity <Void> deleteAccount(@RequestParam Long id) throws UserNotFoundException{
 		userService.deleteUserById(id);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 	}
+	
+	
 
 
 
