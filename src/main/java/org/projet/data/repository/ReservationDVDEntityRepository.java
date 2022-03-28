@@ -1,6 +1,6 @@
 package org.projet.data.repository;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.projet.data.entity.ReservationDvdEntity;
 import org.projet.data.entity.UserEntity;
@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface ReservationDVDEntityRepository extends JpaRepository<ReservationDvdEntity, Long> {
 
 	public Integer countAllByUser(UserEntity user);
-	public ReservationDvdEntity findByUser(UserEntity userEntity);
+	public List<ReservationDvdEntity> findByUser(UserEntity userEntity);
 
 }

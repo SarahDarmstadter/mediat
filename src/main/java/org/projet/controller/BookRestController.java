@@ -49,12 +49,12 @@ public class BookRestController {
 	
 	//Pour les references de livre 
 	
-	@GetMapping("/{author}/{id}/{disponible}")
-	public List <BookRefEntity> findAllBooks(@RequestParam(required = false) String author, @RequestParam(required=false) Long id, @RequestParam(required = false) Boolean disponible ){
-		if(author == null && id !=null && disponible == true || disponible ==false) {
+	@GetMapping()
+	public List <BookRefEntity> findAllBooks(@RequestParam(required = false) String author, @RequestParam(required=false) Long id, @RequestParam(required = false) boolean disponible ){
+		if(author == null && id !=null ) {
 			return (List<BookRefEntity>) bookService.getBookRefbyId(id);
 
-		} else if (id == null && author!=null && (disponible == true || disponible ==false)) {
+		} else if (id == null && author!=null ) {
 			return bookService.getBookRefByAuthor(author);
  
 		} else if (id==null && author != null && disponible==true) { 
@@ -67,10 +67,10 @@ public class BookRestController {
 	
 	//Pour les entités de livre 
 	
-	@GetMapping("/entity/{id}")
-	public List <BookEntity> getAllBookEntities(@RequestParam(required=false) Long id, @RequestParam(required = false) Boolean disponible) {
+	@GetMapping("/entity")
+	public List <BookEntity> getAllBookEntities(@RequestParam(required = false) boolean disponible) {
 		
-		if(id==null && disponible ==true || disponible== false) {
+		if( !disponible ) {
 			return bookService.getAllBookEntity();
 		} else {
 			return bookService.getAllBookDispo();

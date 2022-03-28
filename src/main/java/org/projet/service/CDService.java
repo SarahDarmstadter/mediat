@@ -145,8 +145,8 @@ public class CDService {
 		return cdRefRepository.findAllById(id);
 	}
 
-	public List<CdRefEntity> getCdRefByArtist(String artist, boolean b) {
-		return cdRefRepository.findByArtistAndReference(artist, true);
+	public List<CdRefEntity> getCdRefByArtist(String artist) {
+		return cdRefRepository.findByArtist(artist);
 	}
 
 	
