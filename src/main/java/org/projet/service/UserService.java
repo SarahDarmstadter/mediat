@@ -103,11 +103,21 @@ public class UserService {
 			userRepository.delete(user);
 	}
 	
+<<<<<<< HEAD
 	public List<Object> getAllReservationByUser(UserEntity userEntity){
 		List<Object> reservationList = new ArrayList<Object>();
 		List <ReservationBookEntity> reservationBook = reservationBookRepository.findByUser(userEntity);
 		List <ReservationCdEntity> reservationCD = reservationCDRepository.findByUser(userEntity);
 		List <ReservationDvdEntity> reservationDVD = reservationDVDRepository.findByUser(userEntity);
+=======
+
+	
+	public List<Object> getAllReservationByUser(UserEntity userEntity){
+		List<Object> reservationList = new ArrayList<Object>();
+		List<ReservationBookEntity> reservationBook = reservationBookRepository.findByUser(userEntity);
+		List<ReservationCdEntity> reservationCD = reservationCDRepository.findByUser(userEntity);
+		List<ReservationDvdEntity> reservationDVD = reservationDVDRepository.findByUser(userEntity);
+>>>>>>> a04640e729022018c70316405b26cd587a92b6d4
 		reservationList.add(reservationBook);
 		reservationList.add(reservationDVD);
 		reservationList.add(reservationCD);

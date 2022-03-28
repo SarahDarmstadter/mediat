@@ -133,7 +133,17 @@ public class CDService {
 
 	public List<CdRefEntity> getCdRefbyId(Long id) {
 		return cdRefRepository.findAllById(id);
+<<<<<<< HEAD
 	}	
+=======
+	}
+
+	public List<CdRefEntity> getCdRefByArtist(String artist) {
+		return cdRefRepository.findByArtist(artist);
+	}
+
+	
+>>>>>>> a04640e729022018c70316405b26cd587a92b6d4
 
 	public List<CdRefEntity> getRefByArtistAndIsDispo(String artist, boolean b) {
 		List <CdRefEntity> listRef = cdRefRepository.findByArtistIgnoreCase(artist);

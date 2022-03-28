@@ -46,12 +46,24 @@ public class BookRestController {
 	@Autowired
 	ReservationService reservationService;
 
+<<<<<<< HEAD
 	@GetMapping()
 	public List <BookRefEntity> findAllBooks(@RequestParam(required = false) String author, @RequestParam(required = false) String title, @RequestParam(required=false) Long id, @RequestParam(required = false) boolean disponible ){
 		if(author == null && id!=null) {
 			return (List<BookRefEntity>) bookService.getBookRefbyId(id);
 
 		} else if (id == null && author!=null) {
+=======
+	
+	//Pour les references de livre 
+	
+	@GetMapping()
+	public List <BookRefEntity> findAllBooks(@RequestParam(required = false) String author, @RequestParam(required=false) Long id, @RequestParam(required = false) boolean disponible ){
+		if(author == null && id !=null ) {
+			return (List<BookRefEntity>) bookService.getBookRefbyId(id);
+
+		} else if (id == null && author!=null ) {
+>>>>>>> a04640e729022018c70316405b26cd587a92b6d4
 			return bookService.getBookRefByAuthor(author);
  
 		} else if (id==null && author!= null && disponible==true) { 
@@ -64,11 +76,20 @@ public class BookRestController {
 		
 	}
 	
+<<<<<<< HEAD
 
 	@GetMapping("/entity")
 	public List <BookEntity> getAllBookEntities(@RequestParam(required = false) Boolean disponible) {
 		
 		if(!disponible) {
+=======
+	//Pour les entités de livre 
+	
+	@GetMapping("/entity")
+	public List <BookEntity> getAllBookEntities(@RequestParam(required = false) boolean disponible) {
+		
+		if( !disponible ) {
+>>>>>>> a04640e729022018c70316405b26cd587a92b6d4
 			return bookService.getAllBookEntity();
 		} else {
 			return bookService.getAllBookDispo();
