@@ -94,7 +94,7 @@ public class ReservationService {
 		BookEntity book = reservation.getBook();
 		book.setIsDispo(true);
 		bookService.updateBook(book);
-		reservationBookEntityRepository.delete(reservation);
+		reservationBookEntityRepository.deleteById(reservation.getId());
 	}
 	
 	

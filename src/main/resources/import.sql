@@ -54,7 +54,7 @@ insert into dvd_entity(is_dispo, type_dvd, reference_id) values (true, 'blueray'
 
 insert into reservation_book_entity(borrowing_date, returning_date, book_id, user_id_user) values ('03-24-2022', '03-31-2022', 1, 1);
 insert into reservation_book_entity(borrowing_date, returning_date, book_id, user_id_user) values ('03-24-2022', '03-31-2022', 2, 1);
-insert into reservation_book_entity(borrowing_date, returning_date, book_id, user_id_user) values ('03-24-2022', '03-31-2022', 3, 1);
+insert into reservation_book_entity(borrowing_date, returning_date, book_id, user_id_user) values ('03-24-2022', '03-31-2022', 4, 2);
 
 insert into reservation_cd_entity(borrowing_date, returning_date, cd_id, user_id_user) values ('03-24-2022', '03-31-2022', 1, 2); 
 insert into reservation_cd_entity(borrowing_date, returning_date, cd_id, user_id_user) values ('03-24-2022', '03-31-2022', 2, 3); 

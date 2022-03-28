@@ -49,11 +49,8 @@ public class ReservationServiceTest {
 	@Transactional
 	public void userCanBorrowButBookIsNotAvailable() throws Exception {
 		BookEntity book = new BookEntity();
-		book.setId(5l);
-		book.setIsDispo(false);
-		
-		System.out.println("book is dispo ? " + book.getIsDispo());
-
+		book.setId(3l);
+	
 		UserEntity user = new UserEntity();
 		user.setId(4l);
 		System.out.println("nb de resa d'un user " + reservationService.getNbReservation(user));
@@ -78,7 +75,6 @@ public class ReservationServiceTest {
 	public void userCantBorrowAndBookAvailable() throws Exception{
 		BookEntity book = new BookEntity();
 		book.setId(1l);
-		book.setIsDispo(true);
 
 		List <ReservationBookEntity> bookList = new ArrayList(2);
 
@@ -101,20 +97,19 @@ public class ReservationServiceTest {
 	@Transactional
 	public void UserCancelReservation() {
 		UserEntity user = new UserEntity();
-		user.setId(1l);
+		user.setId(2l);
 		
 		ReservationBookEntity reservation = new ReservationBookEntity();
-		reservation.setUser(user);
-		reservation.setId(1l);
+		reservation.setId(3l);
 		
 		BookEntity book = new BookEntity();
-		book.setId(1l);
+		book.setId(4l);
 		reservation.setBook(book);
+		reservation.setUser(user);
 		
 		reservationService.cancelResaBookById(reservation.getId());
 		
 		assertNull(reservation);
-		
 		
 		
 	}
